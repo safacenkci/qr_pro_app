@@ -19,16 +19,13 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "com.safarahmancenkci.qrpro"
-    compileSdk = flutter.compileSdkVersion
+    // permission_handler_android en az 37 istiyor (targetSdk ayrı, flutter varsayılanı).
+    compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -61,6 +58,12 @@ android {
                 signingConfigs.getByName("debug")
             }
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 

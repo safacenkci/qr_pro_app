@@ -5,14 +5,15 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:qr_pro_app/main.dart';
 
 void main() {
   testWidgets('App boots', (WidgetTester tester) async {
-    await tester.pumpWidget(const QrProApp());
-    await tester.pumpAndSettle();
+    await tester.pumpWidget(const ProviderScope(child: QrProApp()));
+    await tester.pump();
 
     // Basic sanity: bottom navigation exists.
     expect(find.text('Tara'), findsOneWidget);

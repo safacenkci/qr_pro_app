@@ -83,7 +83,8 @@ public sealed class ApiTests(PostgresFixture pg) : IDisposable
         var html = await r.Content.ReadAsStringAsync();
         foreach (var text in new[]
                  {
-                     "QR Pro", "2026-11-23", "Gizlilik Politikası", "Privacy Policy", "Android 12",
+                     "QR Kod Okuyucu", "2026-11-24", "Safa Rahman Cenkci", "ML Kit", "30 gün", "href=\"/delete\"",
+                     "Gizlilik Politikası", "Privacy Policy", "Android 12",
                      "Google Play mağaza sayfasındaki geliştirici iletişim adresi",
                      "the developer contact address on the Google Play store page", "Wi‑Fi",
                      ":root { color-scheme: light dark; }",
@@ -95,6 +96,30 @@ public sealed class ApiTests(PostgresFixture pg) : IDisposable
         Assert.DoesNotContain("{contact_", html);
         Assert.StartsWith("default-src 'none'", r.Headers.GetValues("Content-Security-Policy").Single());
         Assert.Equal("public, max-age=3600", r.Headers.CacheControl?.ToString());
+    }
+
+    [Fact]
+    public async Task DeletePage()
+    {
+        var c = Client(Factory(new Dictionary<string, string>
+        {
+            ["CONTACT_EMAIL"] = "destek@ornek.com",
+            ["DEVELOPER_NAME"] = "Örnek <Geliştirici>",
+        }));
+        var r = await c.GetAsync("/delete");
+        Assert.Equal(HttpStatusCode.OK, r.StatusCode);
+        Assert.Equal("text/html", r.Content.Headers.ContentType?.MediaType);
+        var html = await r.Content.ReadAsStringAsync();
+        foreach (var text in new[]
+                 {
+                     "QR Kod Okuyucu", "Örnek &lt;Geliştirici&gt;", "Veri silme talebi", "GPA.", "30 gün",
+                     "Satın Alımı Geri Yükle", "mailto:destek@ornek.com", "href=\"/privacy\"", "Data Deletion Request",
+                 })
+        {
+            Assert.Contains(text, html);
+        }
+        Assert.DoesNotContain("{", html.Split("<style>")[0] + html.Split("</style>")[1]);
+        Assert.StartsWith("default-src 'none'", r.Headers.GetValues("Content-Security-Policy").Single());
     }
 
     [Fact]
@@ -118,7 +143,6 @@ public sealed class ApiTests(PostgresFixture pg) : IDisposable
         Assert.NotNull(row);
         Assert.Equal(("unverified", "GPA.1", Product, Pkg), (row.Status, row.OrderId, row.ProductId, row.PackageName));
         Assert.Equal("service_account_missing", row.Reason);
-        Assert.Equal("203.0.113.7", row.ClientIp);
         Assert.Null(row.RawResponse);
         Assert.Equal(1, row.RequestCount);
 

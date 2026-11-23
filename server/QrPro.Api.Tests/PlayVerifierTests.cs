@@ -173,8 +173,8 @@ public sealed class SettingsAndPrivacyTests
         var fallback = PrivacyPage.Render("");
         Assert.StartsWith("<!doctype html>\n<html lang=\"tr\">", fallback);
         Assert.EndsWith("</body>\n</html>\n", fallback);
-        Assert.Contains("Yürürlük tarihi / Effective date: 2026-11-23", fallback);
-        Assert.Contains("write to us at the developer contact address on the Google Play store page.", fallback);
+        Assert.Contains("Yürürlük tarihi / Effective date: 2026-11-24", fallback);
+        Assert.Contains("write to the developer contact address on the Google Play store page.", fallback);
 
         var html = PrivacyPage.Render("o'k\"{contact_en}&@x.com");
         Assert.Contains("mailto:o&#x27;k&quot;{contact_en}&amp;@x.com", html);

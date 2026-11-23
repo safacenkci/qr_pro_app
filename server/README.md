@@ -66,7 +66,7 @@ Depo kökünden (Windows'ta Git Bash):
 ```sh
 cd server
 tar --exclude=secrets --exclude=.env --exclude=__pycache__ --exclude=.pytest_cache -czf - . \
-  | ssh root@76.13.1.231 'mkdir -p /opt/qrpro && tar -xzf - -C /opt/qrpro'
+  | ssh root@76.13.1.231 'mkdir -p /opt/qrpro && tar --no-same-owner -xzf - -C /opt/qrpro'
 ssh root@76.13.1.231 'cd /opt/qrpro && docker compose up -d --build && docker compose ps'
 curl -s https://qrpro.76-13-1-231.sslip.io/health
 ```

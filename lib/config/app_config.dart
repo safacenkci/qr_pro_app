@@ -6,7 +6,7 @@ class AppConfig {
   static const String packageName = 'com.safarahmancenkci.qrpro';
 
   /// Satın alma doğrulama ve gizlilik politikası sunucusu.
-  static const String apiBaseUrl = 'https://qrpro.76-13-1-231.sslip.io';
+  static const String apiBaseUrl = 'https://qrpro.safarahmancenkci.com';
 
   /// Play Console'daki gizlilik politikası alanına da bu adres yazılır.
   static const String privacyPolicyUrl = '$apiBaseUrl/privacy';

@@ -9,7 +9,7 @@ Android uygulaması QR Pro (`com.safarahmancenkci.qrpro`) için küçük bir Fas
 | `GET /health` | `{"ok": true}` |
 | `GET /` | `/privacy`'ye yönlendirir |
 
-Canlı adres: `https://qrpro.76-13-1-231.sslip.io` (sunucu `76.13.1.231`, kod `/opt/qrpro`, konteyner `qrpro-api`,
+Canlı adres: `https://qrpro.safarahmancenkci.com` (yedek ad `https://qrpro.76-13-1-231.sslip.io`; sunucu `76.13.1.231`, kod `/opt/qrpro`, konteyner `qrpro-api`,
 yalnızca `127.0.0.1:4400`, önünde nginx + Let's Encrypt).
 
 ## Doğrulama ucu
@@ -68,7 +68,7 @@ cd server
 tar --exclude=secrets --exclude=.env --exclude=__pycache__ --exclude=.pytest_cache -czf - . \
   | ssh root@76.13.1.231 'mkdir -p /opt/qrpro && tar --no-same-owner -xzf - -C /opt/qrpro'
 ssh root@76.13.1.231 'cd /opt/qrpro && docker compose up -d --build && docker compose ps'
-curl -s https://qrpro.76-13-1-231.sslip.io/health
+curl -s https://qrpro.safarahmancenkci.com/health
 ```
 
 `secrets/` ve `.env` sunucuda kalır, kopyalama onlara dokunmaz. Veritabanı `qrpro_qrpro-data` volume'undadır;
@@ -85,9 +85,11 @@ docker compose exec api python -c "import sqlite3; c=sqlite3.connect('/data/qrpr
 
 ## nginx ve TLS
 
-`/etc/nginx/sites-available/qrpro` (bağlantı `sites-enabled/qrpro`) `qrpro.76-13-1-231.sslip.io` adını
+`/etc/nginx/sites-available/qrpro` (bağlantı `sites-enabled/qrpro`) `qrpro.safarahmancenkci.com` ve
+`qrpro.76-13-1-231.sslip.io` adlarını
 `127.0.0.1:4400`'e aktarır; sertifika `certbot --nginx` ile alındı ve kendiliğinden yenilenir, HTTP → HTTPS
-yönlendirilir. nginx dosyasını değiştirdikten sonra her zaman `nginx -t && systemctl reload nginx`.
+yönlendirilir. `qrpro.safarahmancenkci.com` için Hostinger DNS'te `qrpro` → `76.13.1.231` A kaydı gerekir;
+kayıt yayıldıktan sonra `certbot --nginx -d qrpro.safarahmancenkci.com --redirect`. nginx dosyasını değiştirdikten sonra her zaman `nginx -t && systemctl reload nginx`.
 
 ## Testler
 

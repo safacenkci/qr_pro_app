@@ -3,7 +3,7 @@
 QR kod tarama, oluşturma ve geçmiş yönetimi için bir Flutter uygulaması. Uygulama kimliği `com.safarahmancenkci.qrpro`.
 
 - `lib/`: Flutter uygulaması (Riverpod, MVVM)
-- `server/`: satın alma doğrulama API'si ve gizlilik politikası sayfası (Docker, `qrpro.76-13-1-231.sslip.io`)
+- `server/`: satın alma doğrulama API'si ve gizlilik politikası sayfası (Docker, `qrpro.safarahmancenkci.com`)
 - `store/`: Play Console görselleri (512×512 ikon, 1024×500 öne çıkan görsel)
 - `tool/generate_store_assets.py`: ikon ve mağaza görsellerini yeniden üretir
 
@@ -47,7 +47,7 @@ dart run flutter_launcher_icons
 - **Sunucu doğrulaması:** Kurulum için `server/README.md` dosyasına bakın (servis hesabı ve API erişimi). Anahtar
   eklenene kadar sunucu satın almaları kaydeder ama "unverified" döner. Bu durumda uygulama Google Play'in
   sonucuna güvenir.
-- **Gizlilik politikası URL'si:** `https://qrpro.76-13-1-231.sslip.io/privacy`
+- **Gizlilik politikası URL'si:** `https://qrpro.safarahmancenkci.com/privacy`
 - **Reklam içeriyor mu:** Hayır.
 - **İçerik derecelendirmesi:** Yardımcı program. Şiddet, kullanıcılar arası iletişim veya konum paylaşımı yok.
 - **Hedef kitle:** 13 yaş ve üzeri önerilir (çocuklara yönelik değil).

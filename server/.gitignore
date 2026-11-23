@@ -1,4 +1,6 @@
 secrets/
-*.db
-__pycache__/
-.pytest_cache/
+bin/
+obj/
+TestResults/
+*.user
+.vs/

@@ -1,7 +1,8 @@
 .env
 secrets/
-tests/
-__pycache__/
-*.pyc
-*.db
-.pytest_cache/
+**/bin/
+**/obj/
+**/TestResults/
+QrPro.Api.Tests/
+.vs/
+*.user

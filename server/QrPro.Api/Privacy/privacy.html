@@ -1,30 +1,21 @@
-"""QR Pro gizlilik politikası: Türkçe ve İngilizce, tek HTML sayfası."""
-
-from html import escape
-
-EFFECTIVE_DATE = "2026-11-23"
-
-_FALLBACK_TR = "Google Play mağaza sayfasındaki geliştirici iletişim adresi"
-_FALLBACK_EN = "the developer contact address on the Google Play store page"
-
-_TEMPLATE = """<!doctype html>
+<!doctype html>
 <html lang="tr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QR Pro – Gizlilik Politikası / Privacy Policy</title>
 <style>
-  :root {{ color-scheme: light dark; }}
-  body {{ font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6;
-         max-width: 44rem; margin: 0 auto; padding: 1.25rem; font-size: 1.05rem; }}
-  h1 {{ font-size: 1.5rem; margin-bottom: .25rem; }}
-  h2 {{ font-size: 1.25rem; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid #8884; }}
-  h3 {{ font-size: 1.05rem; margin: 1.5rem 0 .25rem; }}
-  p, li {{ margin: .4rem 0; }}
-  ul {{ padding-left: 1.25rem; }}
-  nav a {{ margin-right: 1rem; }}
-  .meta {{ opacity: .75; font-size: .95rem; }}
-  a {{ word-break: break-word; }}
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6;
+         max-width: 44rem; margin: 0 auto; padding: 1.25rem; font-size: 1.05rem; }
+  h1 { font-size: 1.5rem; margin-bottom: .25rem; }
+  h2 { font-size: 1.25rem; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid #8884; }
+  h3 { font-size: 1.05rem; margin: 1.5rem 0 .25rem; }
+  p, li { margin: .4rem 0; }
+  ul { padding-left: 1.25rem; }
+  nav a { margin-right: 1rem; }
+  .meta { opacity: .75; font-size: .95rem; }
+  a { word-break: break-word; }
 </style>
 </head>
 <body>
@@ -108,14 +99,3 @@ _TEMPLATE = """<!doctype html>
 </section>
 </body>
 </html>
-"""
-
-
-def render_privacy(contact_email: str) -> str:
-    if contact_email:
-        safe = escape(contact_email)
-        link = f'<a href="mailto:{safe}">{safe}</a>'
-        contact_tr = contact_en = link
-    else:
-        contact_tr, contact_en = _FALLBACK_TR, _FALLBACK_EN
-    return _TEMPLATE.format(date=EFFECTIVE_DATE, contact_tr=contact_tr, contact_en=contact_en)

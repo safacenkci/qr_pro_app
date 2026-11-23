@@ -10,7 +10,6 @@ import '../services/gallery_service.dart';
 import '../services/premium_service.dart';
 import '../services/share_service.dart';
 import '../viewmodels/generate_viewmodel.dart';
-import '../viewmodels/navigation_viewmodel.dart';
 import '../widgets/premium_upsell_dialog.dart';
 
 class GenerateView extends ConsumerStatefulWidget {

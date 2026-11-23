@@ -9,7 +9,6 @@ import '../services/share_service.dart';
 import '../services/url_service.dart';
 import '../utils/validators.dart';
 import '../utils/wifi_qr.dart';
-import '../viewmodels/navigation_viewmodel.dart';
 import '../viewmodels/history_viewmodel.dart';
 import '../widgets/premium_upsell_dialog.dart';
 

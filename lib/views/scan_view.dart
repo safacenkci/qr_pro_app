@@ -13,7 +13,6 @@ import '../services/wifi_connect_service.dart';
 import '../services/system_settings_service.dart';
 import '../utils/validators.dart';
 import '../utils/wifi_qr.dart';
-import '../viewmodels/navigation_viewmodel.dart';
 import '../viewmodels/scan_viewmodel.dart';
 import '../widgets/premium_upsell_dialog.dart';
 import 'package:qr_flutter/qr_flutter.dart';

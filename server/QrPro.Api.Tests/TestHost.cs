@@ -84,12 +84,11 @@ public sealed class QrProFactory(
     }
 }
 
-/// <summary>Google Play API taklidi: GET yanıtı ya da istisnası ve acknowledge durum kodu ayarlanır.</summary>
-public sealed class FakePublisher(PlayHttpResponse? getResponse = null, Exception? getException = null,
-    int ackStatus = 204, Exception? ackException = null) : IPlayPublisher
+/// <summary>Google Play API taklidi: GET yanıtı ya da istisnası ayarlanır.</summary>
+public sealed class FakePublisher(PlayHttpResponse? getResponse = null, Exception? getException = null)
+    : IPlayPublisher
 {
     public List<(string Package, string Product, string Token)> Gets { get; } = [];
-    public List<(string Package, string Product, string Token)> Acks { get; } = [];
 
     public Task<PlayHttpResponse> GetProductPurchaseAsync(string packageName, string productId, string token,
         CancellationToken ct = default)
@@ -102,19 +101,9 @@ public sealed class FakePublisher(PlayHttpResponse? getResponse = null, Exceptio
         return Task.FromResult(getResponse!);
     }
 
-    public Task<int> AcknowledgeAsync(string packageName, string productId, string token,
-        CancellationToken ct = default)
-    {
-        Acks.Add((packageName, productId, token));
-        if (ackException is not null)
-        {
-            throw ackException;
-        }
-        return Task.FromResult(ackStatus);
-    }
 
-    public static FakePublisher Json(int status, string body, int ackStatus = 204) =>
-        new(new PlayHttpResponse(status, body), ackStatus: ackStatus);
+    public static FakePublisher Json(int status, string body) =>
+        new(new PlayHttpResponse(status, body));
 }
 
 public sealed class FakeSource(IPlayPublisher? publisher) : IPlayPublisherSource

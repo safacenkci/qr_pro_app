@@ -16,37 +16,18 @@ public sealed class PlayVerifierTests
     private static void AssertResult(VerifyResult r, bool? valid, string status, string? reason) =>
         Assert.Equal((valid, status, reason), (r.Valid, r.Status, r.Reason));
 
-    [Fact]
-    public async Task VerifiedAndAcknowledged()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public async Task VerifiedReadOnly(int acknowledgementState)
     {
-        var p = FakePublisher.Json(200, """{"purchaseState":0,"acknowledgementState":0,"consumptionState":0}""");
+        // Onaylanmamış satın almada da sunucu yalnızca okur (onayı uygulama yapar).
+        var p = FakePublisher.Json(200,
+            $$"""{"purchaseState":0,"acknowledgementState":{{acknowledgementState}},"consumptionState":0}""");
         var r = await Verifier(p).VerifyAsync(Pkg, Product, "t/1");
         AssertResult(r, true, "verified", null);
         Assert.Equal([(Pkg, Product, "t/1")], p.Gets);
-        Assert.Equal([(Pkg, Product, "t/1")], p.Acks);
         Assert.Equal(0, r.Raw!["purchaseState"]!.GetValue<int>());
-    }
-
-    [Fact]
-    public async Task AlreadyAcknowledgedNoPost()
-    {
-        var p = FakePublisher.Json(200, """{"purchaseState":0,"acknowledgementState":1}""");
-        Assert.True((await Verifier(p).VerifyAsync(Pkg, Product, "t")).Valid);
-        Assert.Empty(p.Acks);
-    }
-
-    [Fact]
-    public async Task AckFailureStillValid()
-    {
-        var p = FakePublisher.Json(200, """{"purchaseState":0,"acknowledgementState":0}""", ackStatus: 500);
-        AssertResult(await Verifier(p).VerifyAsync(Pkg, Product, "t"), true, "verified", "acknowledge_failed");
-
-        var thrown = new FakePublisher(new PlayHttpResponse(200, """{"purchaseState":0,"acknowledgementState":0}"""),
-            ackException: new HttpRequestException("ag yok"));
-        AssertResult(await Verifier(thrown).VerifyAsync(Pkg, Product, "t"), true, "verified", "acknowledge_failed");
-
-        var ok200 = FakePublisher.Json(200, """{"purchaseState":0,"acknowledgementState":0}""", ackStatus: 200);
-        AssertResult(await Verifier(ok200).VerifyAsync(Pkg, Product, "t"), true, "verified", null);
     }
 
     public static TheoryData<int, string, bool?, string, string> States => new()
@@ -74,7 +55,6 @@ public sealed class PlayVerifierTests
     {
         var p = FakePublisher.Json(status, body);
         AssertResult(await Verifier(p).VerifyAsync(Pkg, Product, "t"), valid, expectedStatus, reason);
-        Assert.Empty(p.Acks);
     }
 
     [Fact]
@@ -139,10 +119,6 @@ public sealed class PlayVerifierTests
         var url = get.RequestUri!.AbsoluteUri;
         Assert.StartsWith("https://androidpublisher.googleapis.com/androidpublisher/v3/applications/", url);
         Assert.EndsWith($"/applications/{Pkg}/purchases/products/{Product}/tokens/t%2F1", url);
-
-        using var ack = GooglePlayPublisher.CreateAcknowledgeRequest(service, Pkg, Product, "t/1");
-        Assert.Equal(HttpMethod.Post, ack.Method);
-        Assert.Equal(url + ":acknowledge", ack.RequestUri!.AbsoluteUri);
     }
 }
 

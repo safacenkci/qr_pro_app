@@ -1,6 +1,8 @@
 namespace QrPro.Api.Play;
 
-/// <summary>Google Play Developer API'nin (androidpublisher v3) kullandığımız iki çağrısı. Testlerde taklit edilir.</summary>
+/// <summary>
+/// Google Play Developer API'nin (androidpublisher v3) kullandığımız tek çağrısı (salt okuma). Testlerde taklit edilir.
+/// </summary>
 public interface IPlayPublisher
 {
     /// <summary>
@@ -10,9 +12,6 @@ public interface IPlayPublisher
     /// </summary>
     Task<PlayHttpResponse> GetProductPurchaseAsync(string packageName, string productId, string token,
         CancellationToken ct = default);
-
-    /// <summary>purchases.products.acknowledge (gövde <c>{}</c>). HTTP durum kodunu döner.</summary>
-    Task<int> AcknowledgeAsync(string packageName, string productId, string token, CancellationToken ct = default);
 }
 
 /// <summary>Servis hesabı anahtarından <see cref="IPlayPublisher"/> kurar.</summary>

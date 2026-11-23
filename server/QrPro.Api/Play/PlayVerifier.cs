@@ -97,35 +97,9 @@ public sealed class PlayVerifier(IPlayPublisherSource source, ILogger<PlayVerifi
             return VerifyResult.Invalid("consumed", data);
         }
 
-        string? ackReason = null;
-        if (Number(data, "acknowledgementState") == 0
-            && !await AcknowledgeAsync(publisher, packageName, productId, token))
-        {
-            ackReason = "acknowledge_failed";
-        }
-        return new VerifyResult(true, "verified", ackReason, data);
-    }
-
-    private async Task<bool> AcknowledgeAsync(IPlayPublisher publisher, string packageName, string productId,
-        string token)
-    {
-        int status;
-        try
-        {
-            status = await publisher.AcknowledgeAsync(packageName, productId, token);
-        }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or IOException
-                                       or PlayAuthException)
-        {
-            log.LogWarning("Onaylama (acknowledge) isteği başarısız: {Error}", ex.Message);
-            return false;
-        }
-        if (status is not (200 or 204))
-        {
-            log.LogWarning("Onaylama (acknowledge) hatası {Status}", status);
-            return false;
-        }
-        return true;
+        // Sunucu yalnızca okur; satın almayı uygulama onaylar (completePurchase). Bu yüzden servis hesabına
+        // Play Console'da yalnızca "Finansal verileri görüntüleme" izni yeter.
+        return new VerifyResult(true, "verified", null, data);
     }
 
     /// <summary>Hata yanıtı: JSON nesnesiyse <c>{"httpStatus": kod, ...gövde}</c>, değilse metnin ilk 2000 karakteri.</summary>

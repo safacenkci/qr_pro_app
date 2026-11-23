@@ -34,12 +34,6 @@ public sealed class GooglePlayPublisher : IPlayPublisher, IDisposable
         string productId, string token) =>
         service.Purchases.Products.Get(packageName, productId, token).CreateRequest();
 
-    public static HttpRequestMessage CreateAcknowledgeRequest(AndroidPublisherService service, string packageName,
-        string productId, string token) =>
-        service.Purchases.Products
-            .Acknowledge(new ProductPurchasesAcknowledgeRequest(), packageName, productId, token)
-            .CreateRequest();
-
     public async Task<PlayHttpResponse> GetProductPurchaseAsync(string packageName, string productId,
         string token, CancellationToken ct = default)
     {
@@ -47,14 +41,6 @@ public sealed class GooglePlayPublisher : IPlayPublisher, IDisposable
         using var response = await SendAsync(request, ct);
         var body = await response.Content.ReadAsStringAsync(ct);
         return new PlayHttpResponse((int)response.StatusCode, body);
-    }
-
-    public async Task<int> AcknowledgeAsync(string packageName, string productId, string token,
-        CancellationToken ct = default)
-    {
-        using var request = CreateAcknowledgeRequest(_service, packageName, productId, token);
-        using var response = await SendAsync(request, ct);
-        return (int)response.StatusCode;
     }
 
     private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)

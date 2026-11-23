@@ -1,3 +1,5 @@
+// Uygulama da material.dart kullanıyor; material_ui'ye geçiş ayrı iş.
+// ignore: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

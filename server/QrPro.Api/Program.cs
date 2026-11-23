@@ -107,28 +107,33 @@ app.MapPost("/v1/purchases/verify", async (HttpContext context, AppSettings sett
     return Results.Json(new VerifyResponse(result.Valid, result.Status, result.Reason));
 });
 
-app.MapGet("/privacy", (HttpContext context, AppSettings settings) =>
+// GET ve HEAD (curl -I ile başlık kontrolü 405 dönmesin).
+string[] getHead = ["GET", "HEAD"];
+
+app.MapMethods("/privacy", getHead, (HttpContext context, AppSettings settings) =>
 {
     context.Response.Headers.ContentSecurityPolicy =
         "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
-    context.Response.Headers.CacheControl = "public, max-age=3600";
+    // Politika güncellenince tarayıcı eski sürümü göstermesin: her açılışta sunucuya sorulur.
+    context.Response.Headers.CacheControl = "no-cache";
     return Results.Content(PrivacyPage.Render(settings.ContactEmail, settings.DeveloperName),
         "text/html; charset=utf-8");
 });
 
 // Play Console "Veri silme" bağlantısı.
-app.MapGet("/delete", (HttpContext context, AppSettings settings) =>
+app.MapMethods("/delete", getHead, (HttpContext context, AppSettings settings) =>
 {
     context.Response.Headers.ContentSecurityPolicy =
         "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
-    context.Response.Headers.CacheControl = "public, max-age=3600";
+    // Politika güncellenince tarayıcı eski sürümü göstermesin: her açılışta sunucuya sorulur.
+    context.Response.Headers.CacheControl = "no-cache";
     return Results.Content(PrivacyPage.RenderDelete(settings.ContactEmail, settings.DeveloperName),
         "text/html; charset=utf-8");
 });
 
-app.MapGet("/health", () => Results.Text("""{"ok":true}""", "application/json"));
+app.MapMethods("/health", getHead, () => Results.Text("""{"ok":true}""", "application/json"));
 
-app.MapGet("/", () => Results.Redirect("/privacy"));
+app.MapMethods("/", getHead, () => Results.Redirect("/privacy"));
 
 app.Run();
 return 0;

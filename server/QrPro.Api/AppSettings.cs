@@ -8,7 +8,7 @@ public sealed record AppSettings
     public string PackageName { get; init; } = "com.safarahmancenkci.qrpro";
     public string ProductId { get; init; } = "qr_pro_lifetime";
     public string ServiceAccountFile { get; init; } = "/secrets/play-service-account.json";
-    public const string DefaultDeveloperName = "Safa Rahman Cenkci";
+    public const string DefaultDeveloperName = "Cenkci Studios";
 
     public string ContactEmail { get; init; } = "";
 

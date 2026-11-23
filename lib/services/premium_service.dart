@@ -11,6 +11,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/app_config.dart';
 
+/// Kullanıcıya bir kez gösterilecek satın alma bildirimi. Metin UI'da
+/// `AppLocalizations` ile üretilir (bkz. `home_view.dart`).
+enum PremiumMessage {
+  purchaseError,
+  storeUnavailable,
+  purchaseStartFailed,
+  restored,
+  nothingToRestore,
+  restoreFailed,
+  paymentPending,
+  purchaseFailed,
+  purchaseSuccess,
+  verificationFailed,
+}
+
 @immutable
 class PremiumState {
   const PremiumState({
@@ -27,14 +42,14 @@ class PremiumState {
   final bool busy;
 
   /// Kullanıcıya bir kez gösterilecek bilgi/hata mesajı.
-  final String? message;
+  final PremiumMessage? message;
 
   PremiumState copyWith({
     bool? isPremium,
     bool? storeAvailable,
     ProductDetails? product,
     bool? busy,
-    String? message,
+    PremiumMessage? message,
     bool clearMessage = false,
   }) {
     return PremiumState(
@@ -94,7 +109,11 @@ class PremiumService extends Notifier<PremiumState> {
       _sub = _iap.purchaseStream.listen(
         _onPurchases,
         onError: (Object e) {
-          state = state.copyWith(busy: false, message: 'Satın alma hatası: $e');
+          debugPrint('PremiumService purchase stream error: $e');
+          state = state.copyWith(
+            busy: false,
+            message: PremiumMessage.purchaseError,
+          );
         },
       );
 
@@ -114,10 +133,7 @@ class PremiumService extends Notifier<PremiumState> {
     if (state.isPremium) return;
     final product = state.product;
     if (!state.storeAvailable || product == null) {
-      state = state.copyWith(
-        message: 'Google Play mağazasına şu anda ulaşılamıyor. '
-            'Lütfen daha sonra tekrar deneyin.',
-      );
+      state = state.copyWith(message: PremiumMessage.storeUnavailable);
       return;
     }
     state = state.copyWith(busy: true, clearMessage: true);
@@ -126,16 +142,17 @@ class PremiumService extends Notifier<PremiumState> {
         purchaseParam: PurchaseParam(productDetails: product),
       );
     } catch (e) {
-      state = state.copyWith(busy: false, message: 'Satın alma başlatılamadı.');
+      state = state.copyWith(
+        busy: false,
+        message: PremiumMessage.purchaseStartFailed,
+      );
     }
   }
 
   /// Daha önce yapılmış satın alımı geri yükler (cihaz değişimi vb.).
   Future<void> restore() async {
     if (!state.storeAvailable) {
-      state = state.copyWith(
-        message: 'Google Play mağazasına şu anda ulaşılamıyor.',
-      );
+      state = state.copyWith(message: PremiumMessage.storeUnavailable);
       return;
     }
     state = state.copyWith(busy: true, clearMessage: true);
@@ -144,11 +161,14 @@ class PremiumService extends Notifier<PremiumState> {
       state = state.copyWith(
         busy: false,
         message: found
-            ? 'Premium geri yüklendi.'
-            : 'Bu Google hesabında Premium satın alımı bulunamadı.',
+            ? PremiumMessage.restored
+            : PremiumMessage.nothingToRestore,
       );
     } catch (_) {
-      state = state.copyWith(busy: false, message: 'Geri yükleme başarısız.');
+      state = state.copyWith(
+        busy: false,
+        message: PremiumMessage.restoreFailed,
+      );
     }
   }
 
@@ -194,7 +214,7 @@ class PremiumService extends Notifier<PremiumState> {
           case PurchaseStatus.pending:
             state = state.copyWith(
               busy: true,
-              message: 'Ödeme onayı bekleniyor…',
+              message: PremiumMessage.paymentPending,
             );
             break;
           case PurchaseStatus.canceled:
@@ -203,7 +223,7 @@ class PremiumService extends Notifier<PremiumState> {
           case PurchaseStatus.error:
             state = state.copyWith(
               busy: false,
-              message: 'Satın alma tamamlanamadı.',
+              message: PremiumMessage.purchaseFailed,
             );
             break;
           case PurchaseStatus.purchased:
@@ -213,8 +233,8 @@ class PremiumService extends Notifier<PremiumState> {
             state = state.copyWith(
               busy: false,
               message: valid
-                  ? 'Teşekkürler! Premium aktif.'
-                  : 'Satın alma doğrulanamadı.',
+                  ? PremiumMessage.purchaseSuccess
+                  : PremiumMessage.verificationFailed,
             );
             break;
         }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/history_item.dart';
 import '../services/premium_service.dart';
 import '../services/share_service.dart';
@@ -23,14 +24,17 @@ class HistoryView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final history = ref.watch(historyViewModelProvider);
     final isPremium = ref.watch(isPremiumProvider);
-    final df = DateFormat('dd.MM.yyyy HH:mm');
+    final l10n = AppLocalizations.of(context);
+    // Yerel ayara uygun kısa tarih ve saat (tr: 24.11.2026 14:05,
+    // en: 11/24/2026 2:05 PM).
+    final df = DateFormat.yMd(l10n.localeName).add_jm();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Geçmiş'),
+        title: Text(l10n.historyTitle),
         actions: [
           IconButton(
-            tooltip: isPremium ? 'CSV İndir' : 'CSV İndir (Premium)',
+            tooltip: isPremium ? l10n.exportCsv : l10n.exportCsvPremium,
             icon: Icon(isPremium ? Icons.download : Icons.lock_outline),
             onPressed: () async {
               if (!isPremium) {
@@ -42,12 +46,12 @@ class HistoryView extends ConsumerWidget {
                     await ref.read(historyViewModelProvider.notifier).exportCsv();
                 await ref.read(shareServiceProvider).shareFile(
                       file,
-                      text: 'QR geçmişim (CSV)',
+                      text: l10n.csvShareText,
                     );
               } catch (_) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Dışa aktarma başarısız')),
+                  SnackBar(content: Text(l10n.exportFailed)),
                 );
               }
             },
@@ -55,17 +59,17 @@ class HistoryView extends ConsumerWidget {
           PopupMenuButton<void>(
             // NOTE: PopupMenuButton intentionally does NOT call onSelected
             // when the returned value is null. So we must use a non-null value.
-            itemBuilder: (context) => const [
+            itemBuilder: (context) => [
               PopupMenuItem<_HistoryAppAction>(
                 value: _HistoryAppAction.clearAll,
-                child: Text('Tümünü Sil'),
+                child: Text(l10n.deleteAll),
               ),
             ],
             onSelected: (_) async {
               await ref.read(historyViewModelProvider.notifier).clearAll();
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Tüm geçmiş silindi')),
+                SnackBar(content: Text(l10n.historyCleared)),
               );
             },
           ),
@@ -73,11 +77,11 @@ class HistoryView extends ConsumerWidget {
       ),
       body: history.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Hata: $e')),
+        error: (e, _) => Center(child: Text(l10n.errorWithDetail('$e'))),
         data: (items) {
           if (items.isEmpty) {
-            return const Center(
-              child: Text('Henüz bir geçmiş yok.'),
+            return Center(
+              child: Text(l10n.historyEmpty),
             );
           }
 
@@ -124,7 +128,10 @@ class HistoryView extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: Text(
-                      '${item.type == HistoryItemType.scanned ? "Okutuldu" : "Oluşturuldu"} • ${df.format(item.createdAt)}',
+                      l10n.historyItemSubtitle(
+                        item.type.name,
+                        df.format(item.createdAt),
+                      ),
                     ),
                     trailing: PopupMenuButton<_HistoryItemAction>(
                       onSelected: (action) async {
@@ -135,7 +142,7 @@ class HistoryView extends ConsumerWidget {
                             );
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Kopyalandı')),
+                              SnackBar(content: Text(l10n.copied)),
                             );
                             break;
                           case _HistoryItemAction.share:
@@ -156,29 +163,29 @@ class HistoryView extends ConsumerWidget {
                                 .deleteById(item.id);
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Silindi')),
+                              SnackBar(content: Text(l10n.deleted)),
                             );
                             break;
                         }
                       },
                       itemBuilder: (context) => [
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: _HistoryItemAction.copy,
-                          child: Text('Kopyala'),
+                          child: Text(l10n.copy),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: _HistoryItemAction.share,
-                          child: Text('Paylaş'),
+                          child: Text(l10n.share),
                         ),
                         if (isUrl)
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: _HistoryItemAction.open,
-                            child: Text('Linki Aç'),
+                            child: Text(l10n.openLink),
                           ),
                         const PopupMenuDivider(),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: _HistoryItemAction.delete,
-                          child: Text('Sil'),
+                          child: Text(l10n.delete),
                         ),
                       ],
                     ),
@@ -193,11 +200,12 @@ class HistoryView extends ConsumerWidget {
   }
 
   void _showPremiumDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     showDialog<void>(
       context: context,
       builder: (_) => PremiumUpsellDialog(
-        title: 'CSV Dışa Aktarma (Premium)',
-        description: 'Geçmişi CSV/Excel olarak indirmek Premium özellik.',
+        title: l10n.csvPremiumTitle,
+        description: l10n.csvPremiumDescription,
         onUpgrade: () => ref.read(premiumProvider.notifier).buy(),
       ),
     );

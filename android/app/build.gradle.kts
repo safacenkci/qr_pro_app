@@ -36,6 +36,13 @@ android {
         versionName = flutter.versionName
     }
 
+    // Yalnızca desteklenen dillerin kaynakları pakete girer (eklentilerin
+    // getirdiği diğer çevirileri atar). lib/l10n ve res/xml/locales_config.xml
+    // ile aynı liste olmalı.
+    androidResources {
+        localeFilters += listOf("tr", "en")
+    }
+
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             create("release") {

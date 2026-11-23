@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 class PremiumUpsellDialog extends StatelessWidget {
   const PremiumUpsellDialog({
     super.key,
@@ -14,6 +16,7 @@ class PremiumUpsellDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
       title: Text(title),
       content: Text(description),
@@ -21,14 +24,14 @@ class PremiumUpsellDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Kapat'),
+          child: Text(l10n.close),
         ),
         FilledButton(
           onPressed: () {
             Navigator.of(context).pop();
             onUpgrade();
           },
-          child: const Text('Premium Al'),
+          child: Text(l10n.getPremium),
         ),
       ],
     );

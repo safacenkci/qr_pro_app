@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/premium_service.dart';
 import '../services/share_service.dart';
 import '../services/url_service.dart';
@@ -104,6 +105,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
     final controller = ref.watch(_scannerControllerProvider);
     final scanState = ref.watch(scanViewModelProvider);
     final isPremium = ref.watch(isPremiumProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: Stack(
@@ -139,11 +141,11 @@ class _ScanViewState extends ConsumerState<ScanView> {
                   _Pill(
                     icon: Icons.qr_code_scanner,
                     label: scanState.isBatchMode
-                        ? 'Toplu (${scanState.batchResults.length})'
-                        : 'Tarama',
+                        ? l10n.scanModeBatch(scanState.batchResults.length)
+                        : l10n.scanModeSingle,
                   ),
                   _CircleIconButton(
-                    tooltip: _torchOn ? 'Fener açık' : 'Fener kapalı',
+                    tooltip: _torchOn ? l10n.torchOn : l10n.torchOff,
                     icon: _torchOn ? Icons.flash_on : Icons.flash_off,
                     onPressed: () async {
                       await controller.toggleTorch();
@@ -177,7 +179,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
                           child: FilledButton.tonalIcon(
                             onPressed: _scanFromGallery,
                             icon: const Icon(Icons.photo_library_outlined),
-                            label: const Text('Galeriden Tara'),
+                            label: Text(l10n.scanFromGallery),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -186,9 +188,8 @@ class _ScanViewState extends ConsumerState<ScanView> {
                             onPressed: () {
                               if (!isPremium) {
                                 _showPremiumDialog(
-                                  title: 'Toplu Tarama (Premium)',
-                                  description:
-                                      'Toplu tarama ile art arda QR kod okuyup listeye ekleyebilirsin.',
+                                  title: l10n.batchScanPremiumTitle,
+                                  description: l10n.batchScanPremiumDescription,
                                 );
                                 return;
                               }
@@ -203,8 +204,8 @@ class _ScanViewState extends ConsumerState<ScanView> {
                             ),
                             label: Text(
                               scanState.isBatchMode
-                                  ? 'Toplu Durdur'
-                                  : 'Toplu Tarama',
+                                  ? l10n.batchScanStop
+                                  : l10n.batchScanStart,
                             ),
                           ),
                         ),
@@ -229,9 +230,10 @@ class _ScanViewState extends ConsumerState<ScanView> {
       final capture = await controller.analyzeImage(picked.path);
       if (!mounted) return;
 
+      final l10n = AppLocalizations.of(context);
       if (capture == null || capture.barcodes.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Görselden QR kod bulunamadı.')),
+          SnackBar(content: Text(l10n.scanNoQrInImage)),
         );
         return;
       }
@@ -240,7 +242,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
       if (value == null || value.trim().isEmpty) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('QR kod okunamadı.')));
+        ).showSnackBar(SnackBar(content: Text(l10n.scanQrUnreadable)));
         return;
       }
 
@@ -248,7 +250,9 @@ class _ScanViewState extends ConsumerState<ScanView> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Görsel tarama desteklenmiyor.')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).scanImageUnsupported),
+        ),
       );
     }
   }
@@ -277,6 +281,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
       builder: (context) {
         final isUrl = Validators.looksLikeUrl(value);
         final wifi = WifiQr.parse(value);
+        final l10n = AppLocalizations.of(context);
 
         // For Wi‑Fi QR codes, we intentionally keep the UI minimal:
         // only "Connect" and "Share" actions (no raw payload shown).
@@ -291,7 +296,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Sonuç', style: Theme.of(context).textTheme.titleLarge),
+              Text(l10n.scanResultTitle, style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
               if (wifi != null) ...[
                 Text(wifi.ssid, style: Theme.of(context).textTheme.titleMedium),
@@ -319,33 +324,32 @@ class _ScanViewState extends ConsumerState<ScanView> {
                           SnackBar(
                             content: Text(
                               ok
-                                  ? 'Bağlantı denendi. Bağlandıysa bildirim çubuğunda görürsün.'
-                                  : 'Wi‑Fi açılamadı/bağlanılamadı. Panel açıldıysa Wi‑Fi’yi açıp geri dön.',
+                                  ? l10n.wifiConnectAttempted
+                                  : l10n.wifiConnectFailed,
                             ),
                           ),
                         );
                       },
                       icon: const Icon(Icons.wifi),
-                      label: const Text('Wi‑Fi’ye Bağlan'),
+                      label: Text(l10n.wifiConnect),
                     ),
                   if (wifi != null)
                     FilledButton.tonalIcon(
                       onPressed: () async {
                         // Share as a QR image, not as plain text.
-                        final ok = await _shareWifiQrAsImage(value);
+                        final ok = await _shareWifiQrAsImage(
+                          value,
+                          shareText: l10n.wifiQrShareText,
+                        );
                         if (!mounted) return;
                         if (!ok) {
                           ScaffoldMessenger.of(this.context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Wi‑Fi QR paylaşımı başarısız oldu',
-                              ),
-                            ),
+                            SnackBar(content: Text(l10n.wifiShareFailed)),
                           );
                         }
                       },
                       icon: const Icon(Icons.share_outlined),
-                      label: const Text('Paylaş'),
+                      label: Text(l10n.share),
                     ),
                   if (wifi == null)
                     FilledButton.icon(
@@ -354,11 +358,11 @@ class _ScanViewState extends ConsumerState<ScanView> {
                         if (!mounted || !context.mounted) return;
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(this.context).showSnackBar(
-                          const SnackBar(content: Text('Kopyalandı')),
+                          SnackBar(content: Text(l10n.copied)),
                         );
                       },
                       icon: const Icon(Icons.copy),
-                      label: const Text('Kopyala'),
+                      label: Text(l10n.copy),
                     ),
                   if (wifi == null)
                     FilledButton.tonalIcon(
@@ -366,7 +370,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
                         await ref.read(shareServiceProvider).shareText(value);
                       },
                       icon: const Icon(Icons.share_outlined),
-                      label: const Text('Paylaş'),
+                      label: Text(l10n.share),
                     ),
                   if (wifi == null && isUrl)
                     FilledButton.tonalIcon(
@@ -377,12 +381,12 @@ class _ScanViewState extends ConsumerState<ScanView> {
                         if (!mounted || !context.mounted) return;
                         if (!ok) {
                           ScaffoldMessenger.of(this.context).showSnackBar(
-                            const SnackBar(content: Text('Link açılamadı')),
+                            SnackBar(content: Text(l10n.linkOpenFailed)),
                           );
                         }
                       },
                       icon: const Icon(Icons.open_in_new),
-                      label: const Text('Aç'),
+                      label: Text(l10n.open),
                     ),
                 ],
               ),
@@ -394,7 +398,10 @@ class _ScanViewState extends ConsumerState<ScanView> {
     );
   }
 
-  Future<bool> _shareWifiQrAsImage(String payload) async {
+  Future<bool> _shareWifiQrAsImage(
+    String payload, {
+    required String shareText,
+  }) async {
     try {
       final painter = QrPainter(
         data: payload,
@@ -418,7 +425,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
       final file = await ref
           .read(galleryServiceProvider)
           .writeTempPng(data, name: 'wifi_qr.png');
-      await ref.read(shareServiceProvider).shareFile(file, text: 'Wi‑Fi QR');
+      await ref.read(shareServiceProvider).shareFile(file, text: shareText);
       return true;
     } catch (_) {
       return false;
@@ -482,6 +489,7 @@ class _BatchPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -492,19 +500,19 @@ class _BatchPanel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Toplu Liste',
+                  l10n.batchListTitle,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton.icon(
                   onPressed: onClear,
                   icon: const Icon(Icons.delete_outline),
-                  label: const Text('Temizle'),
+                  label: Text(l10n.clear),
                 ),
               ],
             ),
             const SizedBox(height: 6),
             if (values.isEmpty)
-              const Text('Henüz bir şey eklenmedi. QR kod okutmaya devam et.')
+              Text(l10n.batchListEmpty)
             else
               SizedBox(
                 height: 120,

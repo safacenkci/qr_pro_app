@@ -83,7 +83,7 @@ public sealed class ApiTests(PostgresFixture pg) : IDisposable
         var html = await r.Content.ReadAsStringAsync();
         foreach (var text in new[]
                  {
-                     "QR Kod Okuyucu", "2026-11-24", "Safa Rahman Cenkci", "ML Kit", "30 gün", "href=\"/delete\"",
+                     "QR Kod Okuyucu", "2026-11-24", "Cenkci Studios", "ML Kit", "30 gün", "href=\"/delete\"",
                      "Gizlilik Politikası", "Privacy Policy", "Android 12",
                      "Google Play mağaza sayfasındaki geliştirici iletişim adresi",
                      "the developer contact address on the Google Play store page", "Wi‑Fi",
@@ -95,7 +95,22 @@ public sealed class ApiTests(PostgresFixture pg) : IDisposable
         Assert.DoesNotContain("{date}", html);
         Assert.DoesNotContain("{contact_", html);
         Assert.StartsWith("default-src 'none'", r.Headers.GetValues("Content-Security-Policy").Single());
-        Assert.Equal("public, max-age=3600", r.Headers.CacheControl?.ToString());
+        Assert.Equal("no-cache", r.Headers.CacheControl?.ToString());
+        Assert.DoesNotContain("QR Pro", html);
+    }
+
+    [Theory]
+    [InlineData("/privacy")]
+    [InlineData("/delete")]
+    [InlineData("/health")]
+    public async Task HeadRequestsAreAllowed(string path)
+    {
+        var r = await Client(Factory()).SendAsync(new HttpRequestMessage(HttpMethod.Head, path));
+        Assert.Equal(HttpStatusCode.OK, r.StatusCode);
+        if (path != "/health")
+        {
+            Assert.Equal("no-cache", r.Headers.CacheControl?.ToString());
+        }
     }
 
     [Fact]

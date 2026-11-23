@@ -95,16 +95,15 @@ app.MapPost("/v1/purchases/verify", async (HttpContext context, AppSettings sett
     try
     {
         await store.RecordAsync(req.PurchaseToken, req.PackageName, req.ProductId, req.OrderId, result.Status,
-            result.Reason, result.Raw?.ToJsonString(), ClientIp.Resolve(context));
+            result.Reason, result.Raw?.ToJsonString());
     }
     catch (Exception ex) // Kayıt hatası doğrulama sonucunu bozmasın.
     {
         verifyLog.LogError(ex, "Satın alma kaydı yazılamadı");
     }
 
-    verifyLog.LogInformation("verify token={Token}… order={Order} -> {Status} ({Reason})",
-        req.PurchaseToken[..Math.Min(12, req.PurchaseToken.Length)], req.OrderId ?? "None", result.Status,
-        result.Reason ?? "None");
+    // Günlükte IP, sipariş numarası ya da tam jeton tutulmaz.
+    verifyLog.LogInformation("verify -> {Status} ({Reason})", result.Status, result.Reason ?? "None");
     return Results.Json(new VerifyResponse(result.Valid, result.Status, result.Reason));
 });
 
@@ -113,7 +112,18 @@ app.MapGet("/privacy", (HttpContext context, AppSettings settings) =>
     context.Response.Headers.ContentSecurityPolicy =
         "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
     context.Response.Headers.CacheControl = "public, max-age=3600";
-    return Results.Content(PrivacyPage.Render(settings.ContactEmail), "text/html; charset=utf-8");
+    return Results.Content(PrivacyPage.Render(settings.ContactEmail, settings.DeveloperName),
+        "text/html; charset=utf-8");
+});
+
+// Play Console "Veri silme" bağlantısı.
+app.MapGet("/delete", (HttpContext context, AppSettings settings) =>
+{
+    context.Response.Headers.ContentSecurityPolicy =
+        "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+    context.Response.Headers.CacheControl = "public, max-age=3600";
+    return Results.Content(PrivacyPage.RenderDelete(settings.ContactEmail, settings.DeveloperName),
+        "text/html; charset=utf-8");
 });
 
 app.MapGet("/health", () => Results.Text("""{"ok":true}""", "application/json"));

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QR Pro – Gizlilik Politikası / Privacy Policy</title>
+<title>QR Kod Okuyucu – Gizlilik Politikası / Privacy Policy</title>
 <style>
   :root { color-scheme: light dark; }
   body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6;
@@ -19,20 +19,24 @@
 </style>
 </head>
 <body>
-<h1>QR Pro</h1>
-<p class="meta">Yürürlük tarihi / Effective date: {date}</p>
-<nav><a href="#tr">Türkçe</a><a href="#en" lang="en">English</a></nav>
+<h1>QR Kod Okuyucu</h1>
+<p class="meta">Geliştirici / Developer: {developer}<br>
+Yürürlük tarihi / Effective date: {date}</p>
+<nav><a href="#tr">Türkçe</a><a href="#en" lang="en">English</a><a href="/delete">Veri silme / Data deletion</a></nav>
 
 <section id="tr">
 <h2>Gizlilik Politikası</h2>
-<p>Bu politika, Android için QR Pro uygulamasının (“Uygulama”) hangi bilgileri nasıl kullandığını açıklar.</p>
+<p>Bu politika, {developer} tarafından geliştirilen Android uygulaması QR Kod Okuyucu'nun (“Uygulama”)
+   hangi bilgileri nasıl kullandığını açıklar.</p>
 
 <h3>İzinler</h3>
 <ul>
   <li><strong>Kamera:</strong> Yalnızca QR kod taramak için kullanılır. Görüntüler cihazınızda işlenir;
       hiçbir yere gönderilmez ve saklanmaz.</li>
-  <li><strong>Fotoğraflar / galeri:</strong> Yalnızca galeriden seçtiğiniz bir görseldeki QR kodu okumak ve
-      oluşturduğunuz QR kodu galeriye kaydetmek için kullanılır.</li>
+  <li><strong>Fotoğraflar / galeri:</strong> Uygulama fotoğraflarınızı okuma izni istemez. Galeriden QR
+      okurken Android'in sistem fotoğraf seçicisi açılır ve yalnızca sizin seçtiğiniz görsel okunur.
+      Oluşturduğunuz QR kodu galeriye kaydederken depolama izni yalnızca Android 9 ve daha eski sürümlerde
+      istenir.</li>
   <li><strong>Konum:</strong> Yalnızca Android 12 ve daha eski sürümlerde, bir Wi‑Fi QR koduyla ağa
       bağlanırken Android bu izni zorunlu tuttuğu için istenir. Konumunuz toplanmaz ve gönderilmez.</li>
 </ul>
@@ -41,20 +45,35 @@
 <p>Tarama ve oluşturma geçmişiniz yalnızca cihazınızda saklanır; bize gönderilmez.
    Uygulamayı kaldırdığınızda ya da uygulama verilerini sildiğinizde bu geçmiş de silinir.</p>
 
+<h3>Google ML Kit (QR tarama)</h3>
+<p>QR kodlar Google ML Kit ile cihaz üzerinde okunur; kamera görüntüleri ve QR içerikleri Google'a
+   gönderilmez. Ancak ML Kit, hizmetin çalışmasını izlemek ve iyileştirmek için Google'a kimliğinizi
+   belirlemeye yönelik olmayan tanılama ve kullanım verileri gönderir: cihaz bilgisi (üretici, model,
+   işletim sistemi sürümü), uygulama bilgisi (paket adı, sürüm), kuruluma özgü tanımlayıcılar, performans
+   ölçümleri (ör. gecikme), API yapılandırması ve hata kodları. Bu veriler HTTPS ile şifrelenerek
+   gönderilir ve Google tarafından üçüncü taraflara aktarılmaz. Ayrıntılar:
+   <a href="https://developers.google.com/ml-kit/android-data-disclosure">ML Kit veri açıklaması</a>.</p>
+
 <h3>Premium satın alımı</h3>
 <p>Ödemeyi Google Play işler; kart ve ödeme bilgileriniz bize ulaşmaz. Premium satın aldığınızda,
    satın alımı doğrulamak için Google Play satın alma jetonu (purchase token), ürün kimliği ve sipariş
-   numarası bu sunucuya gönderilir ve doğrulama kaydı olarak saklanır.</p>
+   numarası bu sunucuya HTTPS ile gönderilir ve doğrulama kaydı olarak saklanır. IP adresiniz bu kayıtta
+   ya da sunucu günlüklerinde tutulmaz.</p>
+
+<h3>Saklama süresi</h3>
+<p>Satın alma doğrulama kaydı, satın alma geçerli olduğu sürece saklanır. Silme talebinde kayıt 30 gün
+   içinde silinir; günlük sunucu yedeklerinden de en geç 14 gün sonra kendiliğinden kalkar.</p>
 
 <h3>Toplamadığımız bilgiler</h3>
 <ul>
   <li>Adınız, e-posta adresiniz ya da başka kişisel bilgileriniz toplanmaz.</li>
-  <li>Reklam, analitik ya da üçüncü taraf izleme araçları yoktur.</li>
+  <li>Reklam yoktur. Yukarıda açıklanan ML Kit tanılama verileri dışında analitik ya da üçüncü taraf
+      izleme aracı kullanılmaz.</li>
 </ul>
 
 <h3>Silme talebi ve iletişim</h3>
-<p>Satın alma kaydınızın silinmesini istemek ya da soru sormak için {contact_tr} üzerinden bize
-   yazabilirsiniz. Talebinizde sipariş numaranızı belirtmeniz kaydı bulmamızı kolaylaştırır.</p>
+<p>Satın alma kaydınızın silinmesini istemek için <a href="/delete">veri silme sayfasındaki</a> adımları
+   izleyin. Sorularınız için bize şu adresten ulaşabilirsiniz: {contact_tr}.</p>
 
 <h3>Değişiklikler</h3>
 <p>Bu politika değişirse güncel sürüm bu sayfada yayımlanır ve yürürlük tarihi güncellenir.</p>
@@ -62,14 +81,17 @@
 
 <section id="en" lang="en">
 <h2>Privacy Policy</h2>
-<p>This policy explains what information the QR Pro app for Android (“the App”) uses and how.</p>
+<p>This policy explains what information QR Kod Okuyucu (“the App”), an Android app developed by
+   {developer}, uses and how.</p>
 
 <h3>Permissions</h3>
 <ul>
   <li><strong>Camera:</strong> Used only to scan QR codes. Images are processed on your device; they are
       never sent anywhere or stored.</li>
-  <li><strong>Photos / gallery:</strong> Used only to read a QR code from an image you pick from your gallery
-      and to save a QR code you create to your gallery.</li>
+  <li><strong>Photos / gallery:</strong> The App does not ask for permission to read your photos. When
+      you scan a QR code from your gallery, Android's system photo picker opens and only the image you
+      pick is read. Storage permission for saving a QR code you create to your gallery is requested only
+      on Android 9 and earlier.</li>
   <li><strong>Location:</strong> Requested only on Android 12 and earlier, because Android requires it to
       connect to a network from a Wi‑Fi QR code. Your location is not collected or sent.</li>
 </ul>
@@ -78,20 +100,36 @@
 <p>Your scan and creation history is stored only on your device and is never sent to us.
    Uninstalling the App or clearing its data deletes this history.</p>
 
+<h3>Google ML Kit (QR scanning)</h3>
+<p>QR codes are read on your device with Google ML Kit; camera images and QR contents are not sent to
+   Google. However, ML Kit sends Google diagnostic and usage data that is not intended to identify you, to
+   monitor and improve the service: device information (manufacturer, model, OS version), app information
+   (package name, version), per-installation identifiers, performance metrics (e.g. latency), API
+   configuration and error codes. This data is encrypted in transit using HTTPS and Google does not
+   transfer it to third parties. Details:
+   <a href="https://developers.google.com/ml-kit/android-data-disclosure">ML Kit data disclosure</a>.</p>
+
 <h3>Premium purchase</h3>
 <p>Payments are processed by Google Play; your card and payment details never reach us. When you buy
-   Premium, the Google Play purchase token, product ID and order number are sent to this server to verify
-   the purchase and are stored as a verification record.</p>
+   Premium, the Google Play purchase token, product ID and order number are sent to this server over HTTPS
+   to verify the purchase and are stored as a verification record. Your IP address is not kept in this
+   record or in server logs.</p>
+
+<h3>Retention</h3>
+<p>The purchase verification record is kept for as long as the purchase is valid. On a deletion request
+   the record is deleted within 30 days; it also drops out of the daily server backups automatically within
+   14 days after that.</p>
 
 <h3>What we do not collect</h3>
 <ul>
   <li>We do not collect your name, email address or any other personal information.</li>
-  <li>There are no ads, no analytics and no third-party tracking.</li>
+  <li>There are no ads. Apart from the ML Kit diagnostic data described above, no analytics or
+      third-party tracking tools are used.</li>
 </ul>
 
 <h3>Deletion requests and contact</h3>
-<p>To ask for your purchase record to be deleted, or for any question, write to us at {contact_en}.
-   Including your order number helps us find the record.</p>
+<p>To have your purchase record deleted, follow the steps on the <a href="/delete">data deletion
+   page</a>. For any question, write to {contact_en}.</p>
 
 <h3>Changes</h3>
 <p>If this policy changes, the current version will be published on this page with an updated effective

@@ -11,9 +11,9 @@ public sealed class PurchaseStore(QrProDbContext db)
     // Google'a hiç sorulmadan verilen bir sonuçla (paket uyuşmazlığı, anahtar yok, ağ hatası) ezilmez: başkası
     // bildiği bir token'ı yanlış paket adıyla göndererek doğrulanmış kaydı bozamasın.
     private const string Upsert = """
-        INSERT INTO purchases (token, package_name, product_id, order_id, status, reason, raw_response, client_ip,
+        INSERT INTO purchases (token, package_name, product_id, order_id, status, reason, raw_response,
                                request_count, created_at, updated_at)
-        VALUES (@token, @package_name, @product_id, @order_id, @status, @reason, @raw_response, @client_ip,
+        VALUES (@token, @package_name, @product_id, @order_id, @status, @reason, @raw_response,
                 1, @now, @now)
         ON CONFLICT (token) DO UPDATE SET
             package_name  = CASE WHEN excluded.raw_response IS NULL AND purchases.raw_response IS NOT NULL
@@ -26,7 +26,6 @@ public sealed class PurchaseStore(QrProDbContext db)
             reason        = CASE WHEN excluded.raw_response IS NULL AND purchases.raw_response IS NOT NULL
                                  THEN purchases.reason ELSE excluded.reason END,
             raw_response  = COALESCE(excluded.raw_response, purchases.raw_response),
-            client_ip     = excluded.client_ip,
             request_count = purchases.request_count + 1,
             updated_at    = excluded.updated_at
         """;
@@ -39,7 +38,6 @@ public sealed class PurchaseStore(QrProDbContext db)
         string status,
         string? reason,
         string? rawResponse,
-        string? clientIp,
         CancellationToken ct = default)
     {
         object[] parameters =
@@ -51,7 +49,6 @@ public sealed class PurchaseStore(QrProDbContext db)
             Text("status", status),
             Text("reason", reason),
             new NpgsqlParameter("raw_response", NpgsqlDbType.Jsonb) { Value = (object?)rawResponse ?? DBNull.Value },
-            Text("client_ip", clientIp),
             new NpgsqlParameter("now", NpgsqlDbType.TimestampTz) { Value = DateTimeOffset.UtcNow },
         ];
         await db.Database.ExecuteSqlRawAsync(Upsert, parameters, ct);

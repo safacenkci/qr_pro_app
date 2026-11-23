@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Privacy\privacy.html" LogicalName="QrPro.Api.Privacy.privacy.html" />
+    <EmbeddedResource Include="Privacy\delete.html" LogicalName="QrPro.Api.Privacy.delete.html" />
   </ItemGroup>
 
   <ItemGroup>

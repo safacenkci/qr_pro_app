@@ -60,7 +60,7 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
   Widget build(BuildContext context) {
     final state = ref.watch(generateViewModelProvider);
     final vm = ref.read(generateViewModelProvider.notifier);
-    final isPremium = ref.watch(premiumProvider);
+    final isPremium = ref.watch(isPremiumProvider);
     final data = state.data;
 
     _syncControllers(state);
@@ -239,9 +239,7 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
       builder: (_) => PremiumUpsellDialog(
         title: title,
         description: description,
-        onUpgrade: () {
-          ref.read(navigationIndexProvider.notifier).setIndex(3);
-        },
+        onUpgrade: () => ref.read(premiumProvider.notifier).buy(),
       ),
     );
   }

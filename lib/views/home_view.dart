@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/premium_service.dart';
 import '../viewmodels/navigation_viewmodel.dart';
 import 'generate_view.dart';
 import 'history_view.dart';
@@ -20,6 +21,15 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(navigationIndexProvider);
+
+    // Satın alma sonuçlarını hangi sekmede olunursa olunsun göster.
+    ref.listen<String?>(premiumProvider.select((s) => s.message), (_, msg) {
+      if (msg == null) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(msg)));
+      ref.read(premiumProvider.notifier).clearMessage();
+    });
 
     return Scaffold(
       body: IndexedStack(index: index, children: _pages),

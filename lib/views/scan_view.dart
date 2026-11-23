@@ -104,7 +104,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
   Widget build(BuildContext context) {
     final controller = ref.watch(_scannerControllerProvider);
     final scanState = ref.watch(scanViewModelProvider);
-    final isPremium = ref.watch(premiumProvider);
+    final isPremium = ref.watch(isPremiumProvider);
 
     return Scaffold(
       body: Stack(
@@ -263,10 +263,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
       builder: (_) => PremiumUpsellDialog(
         title: title,
         description: description,
-        onUpgrade: () {
-          // Mock flow: kullanıcıyı Ayarlar sekmesine yönlendir.
-          ref.read(navigationIndexProvider.notifier).setIndex(3);
-        },
+        onUpgrade: () => ref.read(premiumProvider.notifier).buy(),
       ),
     );
   }

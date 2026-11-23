@@ -23,7 +23,7 @@ class HistoryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final history = ref.watch(historyViewModelProvider);
-    final isPremium = ref.watch(premiumProvider);
+    final isPremium = ref.watch(isPremiumProvider);
     final df = DateFormat('dd.MM.yyyy HH:mm');
 
     return Scaffold(
@@ -199,7 +199,7 @@ class HistoryView extends ConsumerWidget {
       builder: (_) => PremiumUpsellDialog(
         title: 'CSV Dışa Aktarma (Premium)',
         description: 'Geçmişi CSV/Excel olarak indirmek Premium özellik.',
-        onUpgrade: () => ref.read(navigationIndexProvider.notifier).setIndex(3),
+        onUpgrade: () => ref.read(premiumProvider.notifier).buy(),
       ),
     );
   }

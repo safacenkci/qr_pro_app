@@ -1,0 +1,6 @@
+secrets/
+bin/
+obj/
+TestResults/
+*.user
+.vs/

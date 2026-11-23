@@ -1,4 +1,4 @@
-package com.example.qr_pro_app
+package com.safarahmancenkci.qrpro
 
 import android.content.Intent
 import android.os.Build

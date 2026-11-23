@@ -10,7 +10,6 @@ import '../services/gallery_service.dart';
 import '../services/premium_service.dart';
 import '../services/share_service.dart';
 import '../viewmodels/generate_viewmodel.dart';
-import '../viewmodels/navigation_viewmodel.dart';
 import '../widgets/premium_upsell_dialog.dart';
 
 class GenerateView extends ConsumerStatefulWidget {
@@ -60,7 +59,7 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
   Widget build(BuildContext context) {
     final state = ref.watch(generateViewModelProvider);
     final vm = ref.read(generateViewModelProvider.notifier);
-    final isPremium = ref.watch(premiumProvider);
+    final isPremium = ref.watch(isPremiumProvider);
     final data = state.data;
 
     _syncControllers(state);
@@ -239,9 +238,7 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
       builder: (_) => PremiumUpsellDialog(
         title: title,
         description: description,
-        onUpgrade: () {
-          ref.read(navigationIndexProvider.notifier).setIndex(3);
-        },
+        onUpgrade: () => ref.read(premiumProvider.notifier).buy(),
       ),
     );
   }

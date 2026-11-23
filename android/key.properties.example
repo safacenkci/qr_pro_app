@@ -1,0 +1,6 @@
+# android/key.properties olarak kopyalayın ve doldurun. Bu dosyayı ASLA commit etmeyin.
+storePassword=...
+keyPassword=...
+keyAlias=upload
+# android/app klasörüne göre yol (ör. ../upload-keystore.jks) veya tam yol
+storeFile=../upload-keystore.jks

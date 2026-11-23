@@ -13,7 +13,6 @@ import '../services/wifi_connect_service.dart';
 import '../services/system_settings_service.dart';
 import '../utils/validators.dart';
 import '../utils/wifi_qr.dart';
-import '../viewmodels/navigation_viewmodel.dart';
 import '../viewmodels/scan_viewmodel.dart';
 import '../widgets/premium_upsell_dialog.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -104,7 +103,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
   Widget build(BuildContext context) {
     final controller = ref.watch(_scannerControllerProvider);
     final scanState = ref.watch(scanViewModelProvider);
-    final isPremium = ref.watch(premiumProvider);
+    final isPremium = ref.watch(isPremiumProvider);
 
     return Scaffold(
       body: Stack(
@@ -263,10 +262,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
       builder: (_) => PremiumUpsellDialog(
         title: title,
         description: description,
-        onUpgrade: () {
-          // Mock flow: kullanıcıyı Ayarlar sekmesine yönlendir.
-          ref.read(navigationIndexProvider.notifier).setIndex(3);
-        },
+        onUpgrade: () => ref.read(premiumProvider.notifier).buy(),
       ),
     );
   }

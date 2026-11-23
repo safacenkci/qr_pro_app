@@ -1,0 +1,8 @@
+.env
+secrets/
+**/bin/
+**/obj/
+**/TestResults/
+QrPro.Api.Tests/
+.vs/
+*.user

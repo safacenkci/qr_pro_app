@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="QrPro.Api.Tests/QrPro.Api.Tests.csproj" />
+  <Project Path="QrPro.Api/QrPro.Api.csproj" />
+</Solution>

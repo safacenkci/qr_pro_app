@@ -9,7 +9,6 @@ import '../services/share_service.dart';
 import '../services/url_service.dart';
 import '../utils/validators.dart';
 import '../utils/wifi_qr.dart';
-import '../viewmodels/navigation_viewmodel.dart';
 import '../viewmodels/history_viewmodel.dart';
 import '../widgets/premium_upsell_dialog.dart';
 
@@ -23,7 +22,7 @@ class HistoryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final history = ref.watch(historyViewModelProvider);
-    final isPremium = ref.watch(premiumProvider);
+    final isPremium = ref.watch(isPremiumProvider);
     final df = DateFormat('dd.MM.yyyy HH:mm');
 
     return Scaffold(
@@ -199,7 +198,7 @@ class HistoryView extends ConsumerWidget {
       builder: (_) => PremiumUpsellDialog(
         title: 'CSV Dışa Aktarma (Premium)',
         description: 'Geçmişi CSV/Excel olarak indirmek Premium özellik.',
-        onUpgrade: () => ref.read(navigationIndexProvider.notifier).setIndex(3),
+        onUpgrade: () => ref.read(premiumProvider.notifier).buy(),
       ),
     );
   }

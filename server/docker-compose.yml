@@ -1,0 +1,75 @@
+name: qrpro
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: qrpro-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qrpro
+      POSTGRES_USER: qrpro
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env içinde POSTGRES_PASSWORD tanımlı olmalı}
+    # Host'a port açılmaz: yalnızca compose iç ağı (api ve backup) erişir.
+    volumes:
+      - qrpro-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qrpro -d qrpro"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  api:
+    build: .
+    image: qrpro-api:latest
+    container_name: qrpro-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=qrpro;Username=qrpro;Password=${POSTGRES_PASSWORD:?.env içinde POSTGRES_PASSWORD tanımlı olmalı};GSS Encryption Mode=Disable"
+    ports:
+      - "127.0.0.1:4400:8080"
+    volumes:
+      - ./secrets:/secrets:ro
+    healthcheck:
+      test: ["CMD", "dotnet", "QrPro.Api.dll", "--healthcheck"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging: *logging
+
+  # Günlük pg_dump (03:00 UTC), 14 gün saklanır. Bkz. backup.sh.
+  backup:
+    image: postgres:17-alpine
+    container_name: qrpro-backup
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGUSER: qrpro
+      PGDATABASE: qrpro
+      PGPASSWORD: ${POSTGRES_PASSWORD:?.env içinde POSTGRES_PASSWORD tanımlı olmalı}
+      BACKUP_KEEP_DAYS: "14"
+      BACKUP_HOUR_UTC: "3"
+    volumes:
+      - qrpro-backups:/backups
+      - ./backup.sh:/backup.sh:ro
+    entrypoint: ["/bin/sh", "/backup.sh"]
+    logging: *logging
+
+volumes:
+  qrpro-pgdata:
+  qrpro-backups:

@@ -26,8 +26,8 @@ kod `/opt/qrpro`, compose projesi `qrpro`, önünde nginx + Let's Encrypt).
 Yanıt: `{"valid": true|false|null, "status": "verified"|"invalid"|"unverified", "reason": str|null}`
 
 - Paket ya da ürün kimliği farklı → `valid:false` (`package_mismatch` / `product_mismatch`).
-- Google `purchaseState == 0` → `valid:true`; onaylanmamışsa (`acknowledgementState == 0`) sunucu
-  `purchases.products.acknowledge` çağırır (başarısızsa yine `valid:true`, `reason:"acknowledge_failed"`).
+- Google `purchaseState == 0` → `valid:true`. Sunucu Google'a yalnızca `purchases.products.get` ile sorar
+  (salt okuma); satın almayı onaylamaz. Onay (acknowledge) uygulamada `completePurchase` ile yapılır.
 - İptal/iade (`purchaseState == 1`), bekleyen ödeme (`2`), tüketilmiş ürün, Google'ın bulamadığı token
   (400/404/410) → `valid:false`.
 - Servis hesabı anahtarı yok/okunamıyor, Google'a ulaşılamıyor, 5xx/429 ya da izin hatası (401/403) →
@@ -35,7 +35,8 @@ Yanıt: `{"valid": true|false|null, "status": "verified"|"invalid"|"unverified",
 - Eksik ya da hatalı gövde → `422` (`{"detail": [...]}`); bilinmeyen alanlar yok sayılır.
 - Her istek Postgres'te `purchases` tablosuna yazılır (token başına tek satır, upsert): `token` (UNIQUE),
   `package_name`, `product_id`, `order_id`, `status`, `reason`, `raw_response` (Google'ın ham yanıtı, jsonb),
-  `client_ip`, `request_count`, `created_at`, `updated_at`. Aynı token tekrar gelirse satır güncellenir.
+  `request_count`, `created_at`, `updated_at`. Aynı token tekrar gelirse satır güncellenir. İstemcinin IP
+  adresi saklanmaz; hız sınırı yalnızca bellekte tutulur.
   Google'ın yanıtına dayanan bir kayıt, Google'a sorulmadan verilen bir sonuçla (ör. yanlış paket adıyla gönderilen
   aynı token) ezilmez. Kayıt yazılamazsa yanıt yine döner (hata günlüğe yazılır).
 - Koruma: gövde en çok 8 KB (`413`), `/v1/` altında IP başına kayan 60 saniyelik pencerede 30 istek (`429` ve
@@ -89,7 +90,7 @@ docker compose logs -f api                      # günlükler
 docker compose up -d                            # .env değişince (konteyner yeniden oluşturulur)
 docker compose restart api                      # servis hesabı anahtarı değişince
 docker compose exec postgres psql -U qrpro -d qrpro -c \
-  "select token, status, reason, order_id, client_ip, updated_at from purchases order by updated_at desc limit 10"
+  "select token, status, reason, order_id, updated_at from purchases order by updated_at desc limit 10"
 docker compose exec postgres psql -U qrpro -d qrpro -c \
   "delete from purchases where order_id = 'GPA....'"   # silme talebi
 ```
@@ -130,10 +131,10 @@ Anahtar olmadan servis çalışır, yalnızca her doğrulama `unverified` döner
    Hesabın *Keys* sekmesinden *Add key → Create new key → JSON* ile anahtarı indirin.
 2. **Play Console'da yetki:** Play Console → *Kurulum → API erişimi* (Setup → API access) sayfasında aynı Cloud
    projesini bağlayın. (Bu sayfa yoksa: *Kullanıcılar ve izinler → Yeni kullanıcıları davet et* ile servis
-   hesabının e-posta adresini ekleyin.) Servis hesabına uygulama izinlerinden en az şunları verin:
-   **Finansal verileri görüntüleme** (View financial data) ve **Siparişleri ve abonelikleri yönet**
-   (Manage orders and subscriptions). İzinlerin etkinleşmesi bazen birkaç saat sürer; o arada yanıt
-   `unverified` / `google_permission_denied` olur.
+   hesabının e-posta adresini ekleyin.) Servis hesabına uygulama izni olarak yalnızca **Finansal verileri
+   görüntüleme** (View financial data) verin. Sunucu satın almayı yalnızca okur; onay (acknowledge)
+   uygulamada yapılır, bu yüzden "Siparişleri ve abonelikleri yönet" izni gerekmez. İzinlerin etkinleşmesi
+   bazen birkaç saat sürer; o arada yanıt `unverified` / `google_permission_denied` olur.
 3. **Anahtarı sunucuya koyun** (konteyner uid 10001 ile çalışır, klasör ona okunur olmalı; salt okunur bağlanır):
 
    ```sh

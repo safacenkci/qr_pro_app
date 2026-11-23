@@ -1,0 +1,449 @@
+{
+  "@@locale": "tr",
+
+  "appTitle": "QR Kod Okuyucu",
+  "@appTitle": {
+    "description": "Uygulama adı (görev değiştiricide görünen başlık)."
+  },
+
+  "navScan": "Tara",
+  "@navScan": {
+    "description": "Alt gezinme çubuğu: tarama sekmesi."
+  },
+  "navGenerate": "Oluştur",
+  "@navGenerate": {
+    "description": "Alt gezinme çubuğu: QR oluşturma sekmesi."
+  },
+  "navHistory": "Geçmiş",
+  "@navHistory": {
+    "description": "Alt gezinme çubuğu: geçmiş sekmesi."
+  },
+  "navSettings": "Ayarlar",
+  "@navSettings": {
+    "description": "Alt gezinme çubuğu: ayarlar sekmesi."
+  },
+
+  "copy": "Kopyala",
+  "@copy": {
+    "description": "Değeri panoya kopyalama düğmesi."
+  },
+  "copied": "Kopyalandı",
+  "@copied": {
+    "description": "Panoya kopyalandıktan sonraki bildirim."
+  },
+  "share": "Paylaş",
+  "@share": {
+    "description": "Paylaşma düğmesi."
+  },
+  "close": "Kapat",
+  "@close": {
+    "description": "Diyaloğu kapatma düğmesi."
+  },
+  "getPremium": "Premium Al",
+  "@getPremium": {
+    "description": "Premium tanıtım diyaloğundaki satın alma düğmesi."
+  },
+
+  "scanModeSingle": "Tarama",
+  "@scanModeSingle": {
+    "description": "Kamera ekranındaki mod etiketi: tekli tarama."
+  },
+  "scanModeBatch": "Toplu ({count})",
+  "@scanModeBatch": {
+    "description": "Kamera ekranındaki mod etiketi: toplu tarama ve listedeki kod sayısı.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "torchOn": "Fener açık",
+  "@torchOn": {
+    "description": "Fener düğmesinin ipucu: fener açıkken."
+  },
+  "torchOff": "Fener kapalı",
+  "@torchOff": {
+    "description": "Fener düğmesinin ipucu: fener kapalıyken."
+  },
+  "scanFromGallery": "Galeriden Tara",
+  "@scanFromGallery": {
+    "description": "Galeriden görsel seçip QR okuma düğmesi."
+  },
+  "batchScanStart": "Toplu Tarama",
+  "@batchScanStart": {
+    "description": "Toplu tarama modunu başlatan düğme."
+  },
+  "batchScanStop": "Toplu Durdur",
+  "@batchScanStop": {
+    "description": "Toplu tarama modunu durduran düğme."
+  },
+  "batchScanPremiumTitle": "Toplu Tarama (Premium)",
+  "@batchScanPremiumTitle": {
+    "description": "Toplu tarama için Premium diyaloğunun başlığı."
+  },
+  "batchScanPremiumDescription": "Toplu tarama ile art arda QR kod okuyup listeye ekleyebilirsin.",
+  "@batchScanPremiumDescription": {
+    "description": "Toplu tarama için Premium diyaloğunun açıklaması."
+  },
+  "scanNoQrInImage": "Görselden QR kod bulunamadı.",
+  "@scanNoQrInImage": {
+    "description": "Galeriden seçilen görselde QR kod yoksa."
+  },
+  "scanQrUnreadable": "QR kod okunamadı.",
+  "@scanQrUnreadable": {
+    "description": "QR bulundu ama içeriği okunamadıysa."
+  },
+  "scanImageUnsupported": "Görsel tarama desteklenmiyor.",
+  "@scanImageUnsupported": {
+    "description": "Cihaz görselden tarama yapamıyorsa."
+  },
+  "scanResultTitle": "Sonuç",
+  "@scanResultTitle": {
+    "description": "Tarama sonucu alt sayfasının başlığı."
+  },
+  "wifiConnect": "Wi‑Fi’ye Bağlan",
+  "@wifiConnect": {
+    "description": "Wi‑Fi QR kodundaki ağa bağlanma düğmesi."
+  },
+  "wifiConnectAttempted": "Bağlantı denendi. Bağlandıysa bildirim çubuğunda görürsün.",
+  "@wifiConnectAttempted": {
+    "description": "Wi‑Fi bağlantısı başlatıldıktan sonraki bildirim."
+  },
+  "wifiConnectFailed": "Wi‑Fi açılamadı/bağlanılamadı. Panel açıldıysa Wi‑Fi’yi açıp geri dön.",
+  "@wifiConnectFailed": {
+    "description": "Wi‑Fi bağlantısı başarısız olduğunda."
+  },
+  "wifiShareFailed": "Wi‑Fi QR paylaşımı başarısız oldu",
+  "@wifiShareFailed": {
+    "description": "Wi‑Fi QR görseli paylaşılamadığında."
+  },
+  "wifiQrShareText": "Wi‑Fi QR",
+  "@wifiQrShareText": {
+    "description": "Wi‑Fi QR görseli paylaşılırken eklenen metin."
+  },
+  "linkOpenFailed": "Link açılamadı",
+  "@linkOpenFailed": {
+    "description": "Bağlantı tarayıcıda açılamadığında."
+  },
+  "open": "Aç",
+  "@open": {
+    "description": "Bağlantıyı tarayıcıda açma düğmesi."
+  },
+  "batchListTitle": "Toplu Liste",
+  "@batchListTitle": {
+    "description": "Toplu taramada okunan kodların listesi başlığı."
+  },
+  "clear": "Temizle",
+  "@clear": {
+    "description": "Toplu listeyi temizleme düğmesi."
+  },
+  "batchListEmpty": "Henüz bir şey eklenmedi. QR kod okutmaya devam et.",
+  "@batchListEmpty": {
+    "description": "Toplu liste boşken."
+  },
+
+  "generateTitle": "Oluştur",
+  "@generateTitle": {
+    "description": "QR oluşturma ekranının başlığı."
+  },
+  "generateType": "Tür",
+  "@generateType": {
+    "description": "QR içerik türü seçiminin başlığı."
+  },
+  "generateTypeText": "Metin",
+  "@generateTypeText": {
+    "description": "İçerik türü: düz metin."
+  },
+  "generateTypeUrl": "URL",
+  "@generateTypeUrl": {
+    "description": "İçerik türü: web adresi."
+  },
+  "generateTypeWifi": "Wi‑Fi",
+  "@generateTypeWifi": {
+    "description": "İçerik türü: Wi‑Fi ağı."
+  },
+  "generatePreview": "Önizleme",
+  "@generatePreview": {
+    "description": "QR önizleme kartının başlığı."
+  },
+  "generateResetCustomization": "Sadeleştir",
+  "@generateResetCustomization": {
+    "description": "Renk ve logoyu kaldıran düğmenin ipucu."
+  },
+  "addToHistory": "Geçmişe Ekle",
+  "@addToHistory": {
+    "description": "Oluşturulan QR'ı geçmişe ekleme düğmesi."
+  },
+  "addedToHistory": "Geçmişe eklendi",
+  "@addedToHistory": {
+    "description": "QR geçmişe eklendikten sonraki bildirim."
+  },
+  "save": "Kaydet",
+  "@save": {
+    "description": "QR görselini galeriye kaydetme düğmesi."
+  },
+  "generateCustomization": "Özelleştirme",
+  "@generateCustomization": {
+    "description": "Renk ve logo seçeneklerinin başlığı."
+  },
+  "color": "Renk",
+  "@color": {
+    "description": "QR rengini seçme düğmesi."
+  },
+  "colorPremiumTitle": "Renk Değiştirme (Premium)",
+  "@colorPremiumTitle": {
+    "description": "Renk seçimi için Premium diyaloğunun başlığı."
+  },
+  "colorPremiumDescription": "QR rengini değiştirmek Premium özellik.",
+  "@colorPremiumDescription": {
+    "description": "Renk seçimi için Premium diyaloğunun açıklaması."
+  },
+  "addLogo": "Logo Ekle",
+  "@addLogo": {
+    "description": "QR ortasına logo ekleme düğmesi."
+  },
+  "logoPremiumTitle": "Logo Ekleme (Premium)",
+  "@logoPremiumTitle": {
+    "description": "Logo ekleme için Premium diyaloğunun başlığı."
+  },
+  "logoPremiumDescription": "QR kodun ortasına logo eklemek Premium özellik.",
+  "@logoPremiumDescription": {
+    "description": "Logo ekleme için Premium diyaloğunun açıklaması."
+  },
+  "pickQrColor": "QR Rengi Seç",
+  "@pickQrColor": {
+    "description": "Renk seçme diyaloğunun başlığı."
+  },
+  "savedToGallery": "Galeriye kaydedildi",
+  "@savedToGallery": {
+    "description": "QR görseli galeriye kaydedildiğinde."
+  },
+  "saveToGalleryFailed": "Galeriye kaydedilemedi",
+  "@saveToGalleryFailed": {
+    "description": "QR görseli galeriye kaydedilemediğinde."
+  },
+  "saveFailed": "Kaydetme başarısız oldu",
+  "@saveFailed": {
+    "description": "Kaydetme sırasında beklenmeyen hata."
+  },
+  "qrShareText": "QR Kod",
+  "@qrShareText": {
+    "description": "QR görseli paylaşılırken eklenen metin."
+  },
+  "shareFailed": "Paylaşma başarısız oldu",
+  "@shareFailed": {
+    "description": "Paylaşma sırasında hata."
+  },
+  "generateTextLabel": "Metin",
+  "@generateTextLabel": {
+    "description": "Metin alanının etiketi."
+  },
+  "generateTextHint": "Örn. “Merhaba Dünya”",
+  "@generateTextHint": {
+    "description": "Metin alanının örnek ipucu."
+  },
+  "generateUrlLabel": "URL",
+  "@generateUrlLabel": {
+    "description": "Web adresi alanının etiketi."
+  },
+  "wifiSsidLabel": "Wi‑Fi Adı",
+  "@wifiSsidLabel": {
+    "description": "Wi‑Fi ağ adı (SSID) alanının etiketi."
+  },
+  "wifiPasswordLabel": "Şifre",
+  "@wifiPasswordLabel": {
+    "description": "Wi‑Fi şifresi alanının etiketi."
+  },
+  "wifiSecurityLabel": "Güvenlik",
+  "@wifiSecurityLabel": {
+    "description": "Wi‑Fi güvenlik türü seçiminin etiketi."
+  },
+  "wifiAuthWpa3": "WPA3‑Kişisel (SAE)",
+  "@wifiAuthWpa3": {
+    "description": "Wi‑Fi güvenlik türü: WPA3 Personal."
+  },
+  "wifiAuthNone": "Şifresiz",
+  "@wifiAuthNone": {
+    "description": "Wi‑Fi güvenlik türü: açık ağ, şifre yok."
+  },
+
+  "historyTitle": "Geçmiş",
+  "@historyTitle": {
+    "description": "Geçmiş ekranının başlığı."
+  },
+  "exportCsv": "CSV İndir",
+  "@exportCsv": {
+    "description": "Geçmişi CSV olarak dışa aktarma düğmesinin ipucu."
+  },
+  "exportCsvPremium": "CSV İndir (Premium)",
+  "@exportCsvPremium": {
+    "description": "Ücretsiz planda CSV dışa aktarma düğmesinin ipucu."
+  },
+  "csvShareText": "QR geçmişim (CSV)",
+  "@csvShareText": {
+    "description": "CSV dosyası paylaşılırken eklenen metin."
+  },
+  "exportFailed": "Dışa aktarma başarısız",
+  "@exportFailed": {
+    "description": "CSV dışa aktarılamadığında."
+  },
+  "deleteAll": "Tümünü Sil",
+  "@deleteAll": {
+    "description": "Bütün geçmişi silme menü öğesi."
+  },
+  "historyCleared": "Tüm geçmiş silindi",
+  "@historyCleared": {
+    "description": "Bütün geçmiş silindikten sonraki bildirim."
+  },
+  "errorWithDetail": "Hata: {error}",
+  "@errorWithDetail": {
+    "description": "Geçmiş yüklenemediğinde gösterilen hata.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "historyEmpty": "Henüz bir geçmiş yok.",
+  "@historyEmpty": {
+    "description": "Geçmiş boşken."
+  },
+  "historyItemSubtitle": "{type, select, scanned{Okutuldu} other{Oluşturuldu}} • {date}",
+  "@historyItemSubtitle": {
+    "description": "Geçmiş öğesinin alt satırı: kaydın türü (scanned = taranan, generated = oluşturulan) ve tarihi.",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String",
+        "example": "24.11.2026 14:05"
+      }
+    }
+  },
+  "openLink": "Linki Aç",
+  "@openLink": {
+    "description": "Geçmiş öğesindeki bağlantıyı açma menü öğesi."
+  },
+  "delete": "Sil",
+  "@delete": {
+    "description": "Geçmiş öğesini silme menü öğesi."
+  },
+  "deleted": "Silindi",
+  "@deleted": {
+    "description": "Geçmiş öğesi silindikten sonraki bildirim."
+  },
+  "csvPremiumTitle": "CSV Dışa Aktarma (Premium)",
+  "@csvPremiumTitle": {
+    "description": "CSV dışa aktarma için Premium diyaloğunun başlığı."
+  },
+  "csvPremiumDescription": "Geçmişi CSV/Excel olarak indirmek Premium özellik.",
+  "@csvPremiumDescription": {
+    "description": "CSV dışa aktarma için Premium diyaloğunun açıklaması."
+  },
+
+  "settingsTitle": "Ayarlar",
+  "@settingsTitle": {
+    "description": "Ayarlar ekranının başlığı."
+  },
+  "premiumActive": "Premium Aktif",
+  "@premiumActive": {
+    "description": "Premium sahibinin plan başlığı."
+  },
+  "premiumActiveDescription": "Tüm premium özellikler açık. Teşekkürler!",
+  "@premiumActiveDescription": {
+    "description": "Premium sahibinin plan açıklaması."
+  },
+  "freePlan": "Ücretsiz Plan",
+  "@freePlan": {
+    "description": "Ücretsiz kullanıcının plan başlığı."
+  },
+  "freePlanDescription": "Renk, logo, toplu tarama ve CSV dışa aktarma Premium ile açılır.",
+  "@freePlanDescription": {
+    "description": "Ücretsiz kullanıcının plan açıklaması."
+  },
+  "premiumTitle": "Premium",
+  "@premiumTitle": {
+    "description": "Premium satın alma kartının başlığı."
+  },
+  "premiumOneTimePayment": "Tek seferlik ödeme, abonelik yok.",
+  "@premiumOneTimePayment": {
+    "description": "Premium satın alma kartının açıklaması."
+  },
+  "upgradeToPro": "Pro'ya Geç",
+  "@upgradeToPro": {
+    "description": "Fiyat bilinmezken satın alma düğmesi."
+  },
+  "upgradeToProWithPrice": "Pro'ya Geç · {price}",
+  "@upgradeToProWithPrice": {
+    "description": "Satın alma düğmesi; fiyat mağazadan biçimlenmiş gelir.",
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "example": "₺49,99"
+      }
+    }
+  },
+  "restorePurchase": "Satın Alımı Geri Yükle",
+  "@restorePurchase": {
+    "description": "Önceki satın alımı geri yükleme düğmesi."
+  },
+  "privacyPolicy": "Gizlilik Politikası",
+  "@privacyPolicy": {
+    "description": "Gizlilik politikasını açan satır."
+  },
+  "version": "Sürüm",
+  "@version": {
+    "description": "Uygulama sürümü satırı."
+  },
+  "language": "Dil",
+  "@language": {
+    "description": "Dil seçimi satırının ve diyaloğunun başlığı."
+  },
+  "languageSystem": "Sistem",
+  "@languageSystem": {
+    "description": "Dil seçeneği: cihaz dilini kullan."
+  },
+
+  "premiumMsgPurchaseError": "Satın alma sırasında bir hata oluştu.",
+  "@premiumMsgPurchaseError": {
+    "description": "Satın alma akışından hata geldiğinde."
+  },
+  "premiumMsgStoreUnavailable": "Google Play mağazasına şu anda ulaşılamıyor. Lütfen daha sonra tekrar deneyin.",
+  "@premiumMsgStoreUnavailable": {
+    "description": "Mağaza ya da ürün bilgisi kullanılamadığında."
+  },
+  "premiumMsgPurchaseStartFailed": "Satın alma başlatılamadı.",
+  "@premiumMsgPurchaseStartFailed": {
+    "description": "Satın alma ekranı açılamadığında."
+  },
+  "premiumMsgRestored": "Premium geri yüklendi.",
+  "@premiumMsgRestored": {
+    "description": "Geri yükleme başarılı olduğunda."
+  },
+  "premiumMsgNothingToRestore": "Bu Google hesabında Premium satın alımı bulunamadı.",
+  "@premiumMsgNothingToRestore": {
+    "description": "Geri yüklenecek satın alım bulunamadığında."
+  },
+  "premiumMsgRestoreFailed": "Geri yükleme başarısız.",
+  "@premiumMsgRestoreFailed": {
+    "description": "Geri yükleme sırasında hata."
+  },
+  "premiumMsgPaymentPending": "Ödeme onayı bekleniyor…",
+  "@premiumMsgPaymentPending": {
+    "description": "Ödeme beklemede olduğunda."
+  },
+  "premiumMsgPurchaseFailed": "Satın alma tamamlanamadı.",
+  "@premiumMsgPurchaseFailed": {
+    "description": "Mağaza satın almayı hata ile bitirdiğinde."
+  },
+  "premiumMsgPurchaseSuccess": "Teşekkürler! Premium aktif.",
+  "@premiumMsgPurchaseSuccess": {
+    "description": "Satın alma doğrulanıp Premium açıldığında."
+  },
+  "premiumMsgVerificationFailed": "Satın alma doğrulanamadı.",
+  "@premiumMsgVerificationFailed": {
+    "description": "Sunucu satın almayı geçersiz saydığında."
+  }
+}

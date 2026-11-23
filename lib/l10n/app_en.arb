@@ -14,7 +14,7 @@
   "close": "Close",
   "getPremium": "Get Premium",
 
-  "scanModeSingle": "Scan",
+  "scanModeSingle": "Scanning",
   "scanModeBatch": "Batch ({count})",
   "torchOn": "Flashlight on",
   "torchOff": "Flashlight off",

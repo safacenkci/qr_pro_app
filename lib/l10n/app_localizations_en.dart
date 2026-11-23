@@ -41,7 +41,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get getPremium => 'Get Premium';
 
   @override
-  String get scanModeSingle => 'Scan';
+  String get scanModeSingle => 'Scanning';
 
   @override
   String scanModeBatch(int count) {

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/gallery_service.dart';
 import '../services/premium_service.dart';
 import '../services/share_service.dart';
@@ -61,11 +62,12 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
     final vm = ref.read(generateViewModelProvider.notifier);
     final isPremium = ref.watch(isPremiumProvider);
     final data = state.data;
+    final l10n = AppLocalizations.of(context);
 
     _syncControllers(state);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Oluştur')),
+      appBar: AppBar(title: Text(l10n.generateTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -76,26 +78,26 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Tür',
+                    l10n.generateType,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 10),
                   SegmentedButton<GenerateType>(
-                    segments: const [
+                    segments: [
                       ButtonSegment(
                         value: GenerateType.text,
-                        label: Text('Metin'),
-                        icon: Icon(Icons.text_fields),
+                        label: Text(l10n.generateTypeText),
+                        icon: const Icon(Icons.text_fields),
                       ),
                       ButtonSegment(
                         value: GenerateType.url,
-                        label: Text('URL'),
-                        icon: Icon(Icons.link),
+                        label: Text(l10n.generateTypeUrl),
+                        icon: const Icon(Icons.link),
                       ),
                       ButtonSegment(
                         value: GenerateType.wifi,
-                        label: Text('Wi‑Fi'),
-                        icon: Icon(Icons.wifi),
+                        label: Text(l10n.generateTypeWifi),
+                        icon: const Icon(Icons.wifi),
                       ),
                     ],
                     selected: {state.type},
@@ -125,12 +127,12 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Önizleme',
+                        l10n.generatePreview,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       if (state.logoPath != null)
                         IconButton(
-                          tooltip: 'Sadeleştir',
+                          tooltip: l10n.generateResetCustomization,
                           onPressed: vm.resetCustomization,
                           icon: const Icon(Icons.close),
                         ),
@@ -157,23 +159,23 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
                           await vm.saveToHistoryIfValid();
                           if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Geçmişe eklendi')),
+                            SnackBar(content: Text(l10n.addedToHistory)),
                           );
                         },
                         icon: const Icon(Icons.history),
-                        label: const Text('Geçmişe Ekle'),
+                        label: Text(l10n.addToHistory),
                       ),
                       FilledButton.tonalIcon(
                         onPressed: data.trim().isEmpty
                             ? null
                             : _shareQrAsImage,
                         icon: const Icon(Icons.share_outlined),
-                        label: const Text('Paylaş'),
+                        label: Text(l10n.share),
                       ),
                       FilledButton.icon(
                         onPressed: data.trim().isEmpty ? null : _saveQrToGallery,
                         icon: const Icon(Icons.download),
-                        label: const Text('Kaydet'),
+                        label: Text(l10n.save),
                       ),
                     ],
                   ),
@@ -181,7 +183,7 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
                   Divider(color: Theme.of(context).colorScheme.outlineVariant),
                   const SizedBox(height: 12),
                   Text(
-                    'Özelleştirme',
+                    l10n.generateCustomization,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 10),
@@ -193,24 +195,22 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
                         onPressed: () {
                           if (!isPremium) {
                             _showPremiumDialog(
-                              title: 'Renk Değiştirme (Premium)',
-                              description:
-                                  'QR rengini değiştirmek Premium özellik.',
+                              title: l10n.colorPremiumTitle,
+                              description: l10n.colorPremiumDescription,
                             );
                             return;
                           }
                           _pickColor();
                         },
                         icon: const Icon(Icons.palette_outlined),
-                        label: const Text('Renk'),
+                        label: Text(l10n.color),
                       ),
                       FilledButton.tonalIcon(
                         onPressed: () async {
                           if (!isPremium) {
                             _showPremiumDialog(
-                              title: 'Logo Ekleme (Premium)',
-                              description:
-                                  'QR kodun ortasına logo eklemek Premium özellik.',
+                              title: l10n.logoPremiumTitle,
+                              description: l10n.logoPremiumDescription,
                             );
                             return;
                           }
@@ -219,7 +219,7 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
                           if (file == null) return;
                         },
                         icon: const Icon(Icons.image_outlined),
-                        label: const Text('Logo Ekle'),
+                        label: Text(l10n.addLogo),
                       ),
                     ],
                   ),
@@ -258,7 +258,7 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('QR Rengi Seç'),
+          title: Text(AppLocalizations.of(context).pickQrColor),
           content: Wrap(
             spacing: 10,
             runSpacing: 10,
@@ -302,20 +302,22 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
 
       final ok = await ref.read(galleryServiceProvider).savePngToGallery(bytes);
       if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(ok ? 'Galeriye kaydedildi' : 'Galeriye kaydedilemedi'),
+          content: Text(ok ? l10n.savedToGallery : l10n.saveToGalleryFailed),
         ),
       );
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kaydetme başarısız oldu')),
+        SnackBar(content: Text(AppLocalizations.of(context).saveFailed)),
       );
     }
   }
 
   Future<void> _shareQrAsImage() async {
+    final shareText = AppLocalizations.of(context).qrShareText;
     try {
       final bytes = await _captureQrPng();
       if (bytes == null) return;
@@ -323,12 +325,12 @@ class _GenerateViewState extends ConsumerState<GenerateView> {
       final file = await ref.read(galleryServiceProvider).writeTempPng(bytes);
       await ref.read(shareServiceProvider).shareFile(
             file,
-            text: 'QR Kod',
+            text: shareText,
           );
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Paylaşma başarısız oldu')),
+        SnackBar(content: Text(AppLocalizations.of(context).shareFailed)),
       );
     }
   }
@@ -353,15 +355,16 @@ class _Form extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     switch (state.type) {
       case GenerateType.text:
         return TextField(
           key: const ValueKey('generate_text'),
           controller: textController,
           onChanged: vm.setText,
-          decoration: const InputDecoration(
-            labelText: 'Metin',
-            hintText: 'Örn. “Merhaba Dünya”',
+          decoration: InputDecoration(
+            labelText: l10n.generateTextLabel,
+            hintText: l10n.generateTextHint,
           ),
           maxLines: 3,
         );
@@ -370,8 +373,8 @@ class _Form extends StatelessWidget {
           key: const ValueKey('generate_url'),
           controller: urlController,
           onChanged: vm.setUrl,
-          decoration: const InputDecoration(
-            labelText: 'URL',
+          decoration: InputDecoration(
+            labelText: l10n.generateUrlLabel,
             hintText: 'https://',
           ),
           keyboardType: TextInputType.url,
@@ -383,7 +386,7 @@ class _Form extends StatelessWidget {
               key: const ValueKey('generate_wifi_ssid'),
               controller: ssidController,
               onChanged: vm.setWifiSsid,
-              decoration: const InputDecoration(labelText: 'Wi‑Fi Adı'),
+              decoration: InputDecoration(labelText: l10n.wifiSsidLabel),
             ),
             const SizedBox(height: 10),
             if (state.wifiAuth != WifiAuth.nopass) ...[
@@ -391,27 +394,34 @@ class _Form extends StatelessWidget {
                 key: const ValueKey('generate_wifi_password'),
                 controller: passwordController,
                 onChanged: vm.setWifiPassword,
-                decoration: const InputDecoration(labelText: 'Şifre'),
+                decoration: InputDecoration(labelText: l10n.wifiPasswordLabel),
                 obscureText: true,
               ),
               const SizedBox(height: 10),
             ],
             DropdownButtonFormField<WifiAuth>(
               initialValue: state.wifiAuth,
-              items: const [
-                DropdownMenuItem(value: WifiAuth.wpa, child: Text('WPA/WPA2')),
+              items: [
+                // WPA/WPA2 ve WEP teknik adlar; her dilde aynı kalır.
+                const DropdownMenuItem(
+                  value: WifiAuth.wpa,
+                  child: Text('WPA/WPA2'),
+                ),
                 DropdownMenuItem(
                   value: WifiAuth.wpa3,
-                  child: Text('WPA3‑Kişisel (SAE)'),
+                  child: Text(l10n.wifiAuthWpa3),
                 ),
-                DropdownMenuItem(value: WifiAuth.wep, child: Text('WEP')),
-                DropdownMenuItem(value: WifiAuth.nopass, child: Text('Şifresiz')),
+                const DropdownMenuItem(value: WifiAuth.wep, child: Text('WEP')),
+                DropdownMenuItem(
+                  value: WifiAuth.nopass,
+                  child: Text(l10n.wifiAuthNone),
+                ),
               ],
               onChanged: (v) {
                 if (v == null) return;
                 vm.setWifiAuth(v);
               },
-              decoration: const InputDecoration(labelText: 'Güvenlik'),
+              decoration: InputDecoration(labelText: l10n.wifiSecurityLabel),
             ),
           ],
         );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/app_localizations.dart';
@@ -32,12 +31,8 @@ class QrProApp extends ConsumerWidget {
       // null: cihaz dili. Desteklenmeyen dillerde supportedLocales'in ilki
       // (en, bkz. l10n.yaml preferred-supported-locales) seçilir.
       locale: language.locale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+      // AppLocalizations + Material, Cupertino ve Widgets yerelleştirmeleri.
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const HomeView(),
     );

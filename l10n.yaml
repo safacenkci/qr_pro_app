@@ -7,3 +7,7 @@ output-class: AppLocalizations
 nullable-getter: false
 preferred-supported-locales:
   - en
+# Flutter 3.47+ Global*Localizations'ı material_ui/cupertino_ui paketlerine
+# taşıdı; gen-l10n hâlâ eski adları üretiyor. Proje material.dart'tan
+# geçene kadar üretilen dosyadaki bu bilgi uyarısını sustur.
+header: "// ignore_for_file: deprecated_member_use"

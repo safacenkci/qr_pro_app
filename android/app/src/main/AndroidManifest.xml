@@ -20,7 +20,8 @@
     <!-- wifi_iot hotspot özelliği için ekliyor; uygulama kullanmıyor. -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:node="remove" />
     <application
-        android:label="QR Kod Okuyucu"
+        android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

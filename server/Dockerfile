@@ -1,22 +1,25 @@
-FROM python:3.12-slim
+# Derleme aşaması
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY QrPro.Api/QrPro.Api.csproj QrPro.Api/
+RUN dotnet restore QrPro.Api/QrPro.Api.csproj
+COPY QrPro.Api/ QrPro.Api/
+RUN dotnet publish QrPro.Api/QrPro.Api.csproj -c Release -o /app --no-restore -p:UseAppHost=false
 
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
-
-WORKDIR /srv
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
+# Çalışma aşaması
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 # Ayrıcalıksız kullanıcı (uid 10001). /secrets bağlaması bu kullanıcıya okunur olmalı (README).
-RUN useradd --system --uid 10001 --no-create-home qrpro \
-    && mkdir -p /data \
-    && chown qrpro:qrpro /data
-COPY app ./app
+RUN groupadd --system --gid 10001 qrpro \
+    && useradd --system --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin qrpro
+WORKDIR /app
+COPY --from=build /app .
 
-USER qrpro
-EXPOSE 8000
+# Paylaşımlı sunucu: iş istasyonu GC'si daha az bellek tutar.
+ENV ASPNETCORE_HTTP_PORTS=8080 \
+    DOTNET_gcServer=0 \
+    DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+USER 10001:10001
+EXPOSE 8080
 # Konteyner yalnızca 127.0.0.1'e yayınlanır; gelen her bağlantı nginx'tendir, X-Forwarded-For güvenilir.
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", \
-     "--proxy-headers", "--forwarded-allow-ips", "*", "--no-server-header"]
+ENTRYPOINT ["dotnet", "QrPro.Api.dll"]

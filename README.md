@@ -3,7 +3,7 @@
 QR kod tarama, oluşturma ve geçmiş yönetimi için bir Flutter uygulaması. Uygulama kimliği `com.safarahmancenkci.qrpro`.
 
 - `lib/`: Flutter uygulaması (Riverpod, MVVM)
-- `server/`: satın alma doğrulama API'si ve gizlilik politikası sayfası (Docker, `qrpro.safarahmancenkci.com`)
+- `server/`: satın alma doğrulama API'si ve gizlilik politikası sayfası (ASP.NET Core + PostgreSQL, Docker, `qrpro.safarahmancenkci.com`)
 - `store/`: Play Console görselleri (512×512 ikon, 1024×500 öne çıkan görsel)
 - `tool/generate_store_assets.py`: ikon ve mağaza görsellerini yeniden üretir
 

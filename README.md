@@ -48,6 +48,7 @@ dart run flutter_launcher_icons
   eklenene kadar sunucu satın almaları kaydeder ama "unverified" döner. Bu durumda uygulama Google Play'in
   sonucuna güvenir.
 - **Gizlilik politikası URL'si:** `https://qrpro.safarahmancenkci.com/privacy`
+- **Veri silme URL'si:** `https://qrpro.safarahmancenkci.com/delete`
 - **Reklam içeriyor mu:** Hayır.
 - **İçerik derecelendirmesi:** Yardımcı program. Şiddet, kullanıcılar arası iletişim veya konum paylaşımı yok.
 - **Hedef kitle:** 13 yaş ve üzeri önerilir (çocuklara yönelik değil).
@@ -58,13 +59,27 @@ dart run flutter_launcher_icons
 
 | Soru | Yanıt |
 |---|---|
-| Veri topluyor veya paylaşıyor mu? | Evet, yalnızca satın alma bilgisi |
-| Toplanan veri türü | Finansal bilgiler → **Satın alma geçmişi** (Play satın alma jetonu, ürün kimliği, sipariş no.) |
-| Amaç | Uygulama işlevselliği (satın almayı doğrulama), dolandırıcılık önleme |
-| Üçüncü taraflarla paylaşılıyor mu? | Hayır |
-| İsteğe bağlı mı? | Evet (yalnızca Premium satın alanlar) |
-| Aktarım sırasında şifreleniyor mu? | Evet (HTTPS) |
-| Silme talebi | Gizlilik politikasındaki iletişim adresi üzerinden |
-| Konum | **Toplanmaz.** İzin yalnızca Android 12 ve altında, Wi‑Fi QR'ı ile ağa bağlanırken sistem gerektirdiği için istenir. Veri cihazdan çıkmaz. |
-| Fotoğraflar / kamera | **Toplanmaz.** Görüntüler cihazda işlenir. Galeriden seçim sistemin fotoğraf seçicisiyle yapılır. |
-| Tarama geçmişi | **Toplanmaz.** Yalnızca cihazda saklanır. |
+| Veri topluyor veya paylaşıyor mu? | **Evet**: satın alma geçmişi (sunucumuz) ve ML Kit tanılama verisi (Google) |
+| Aktarım sırasında şifreleniyor mu? | Evet (HTTPS, ikisi için de) |
+| Silme talebi yolu | Evet, `https://qrpro.safarahmancenkci.com/delete` (Play Console → Veri silme URL'si) |
+
+**Beyan edilecek veri türleri**
+
+| Veri türü (Play kategorisi) | Toplanıyor / Paylaşılıyor | Zorunlu mu | Amaç | İçerik |
+|---|---|---|---|---|
+| Finansal bilgiler → **Satın alma geçmişi** | Toplanıyor / Paylaşılmıyor | İsteğe bağlı (yalnızca Premium alanlar) | Uygulama işlevselliği, dolandırıcılık önleme | Play satın alma jetonu, ürün kimliği, sipariş no. IP adresi tutulmaz. |
+| Uygulama etkinliği ve performansı → **Tanılama** | Toplanıyor / Paylaşılmıyor¹ | Zorunlu (kapatılamaz) | Analiz | ML Kit: performans ölçümleri (gecikme), API yapılandırması, hata kodları, cihaz ve uygulama bilgisi |
+| Cihaz veya diğer kimlikler → **Cihaz veya diğer kimlikler** | Toplanıyor / Paylaşılmıyor¹ | Zorunlu (kapatılamaz) | Analiz | ML Kit (gömülü sürüm): kullanıcıyı/cihazı tanımlamaya yönelik olmayan, kuruluma özgü tanımlayıcı |
+
+¹ ML Kit verisini Google, hizmet sağlayıcı olarak toplar ve üçüncü taraflara aktarmaz
+([ML Kit veri açıklaması](https://developers.google.com/ml-kit/android-data-disclosure)). Play'in tanımında
+hizmet sağlayıcıya aktarım "paylaşım" sayılmaz.
+
+**Toplanmayanlar (beyan edilmez)**
+
+| Konu | Açıklama |
+|---|---|
+| Konum | İzin yalnızca Android 12 ve altında, Wi‑Fi QR'ı ile ağa bağlanırken sistem gerektirdiği için istenir. Veri cihazdan çıkmaz. |
+| Fotoğraflar / kamera | Görüntüler cihazda işlenir. Okuma izni istenmez; galeriden seçim sistem fotoğraf seçicisiyle yapılır. |
+| Tarama geçmişi | Yalnızca cihazda saklanır. |
+| Reklam kimliği (AD_ID) | İzin uygulamada yok; Play Console'da "Reklam kimliği kullanılıyor mu?" sorusuna **Hayır**. |

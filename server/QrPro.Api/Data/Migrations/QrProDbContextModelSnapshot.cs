@@ -31,10 +31,6 @@ namespace QrPro.Api.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("ClientIp")
-                        .HasColumnType("text")
-                        .HasColumnName("client_ip");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")

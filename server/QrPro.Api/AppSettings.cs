@@ -8,7 +8,12 @@ public sealed record AppSettings
     public string PackageName { get; init; } = "com.safarahmancenkci.qrpro";
     public string ProductId { get; init; } = "qr_pro_lifetime";
     public string ServiceAccountFile { get; init; } = "/secrets/play-service-account.json";
+    public const string DefaultDeveloperName = "Safa Rahman Cenkci";
+
     public string ContactEmail { get; init; } = "";
+
+    /// <summary>Play Console'daki geliştirici adı; gizlilik ve veri silme sayfalarında görünür.</summary>
+    public string DeveloperName { get; init; } = DefaultDeveloperName;
 
     // Kötüye kullanım koruması.
     public int MaxBodyBytes { get; init; } = 8 * 1024;
@@ -26,6 +31,9 @@ public sealed record AppSettings
             ProductId = config["PRODUCT_ID"] ?? d.ProductId,
             ServiceAccountFile = config["SERVICE_ACCOUNT_FILE"] ?? d.ServiceAccountFile,
             ContactEmail = (config["CONTACT_EMAIL"] ?? "").Trim(),
+            DeveloperName = string.IsNullOrWhiteSpace(config["DEVELOPER_NAME"])
+                ? d.DeveloperName
+                : config["DEVELOPER_NAME"]!.Trim(),
             MaxBodyBytes = Int(config, "MAX_BODY_BYTES", d.MaxBodyBytes),
             RateLimitPerMinute = Int(config, "RATE_LIMIT_PER_MINUTE", d.RateLimitPerMinute),
             GoogleTimeoutSeconds = Int(config, "GOOGLE_TIMEOUT", d.GoogleTimeoutSeconds),

@@ -20,7 +20,6 @@ public sealed class QrProDbContext(DbContextOptions<QrProDbContext> options) : D
             e.Property(p => p.Status).HasColumnName("status").IsRequired();
             e.Property(p => p.Reason).HasColumnName("reason");
             e.Property(p => p.RawResponse).HasColumnName("raw_response").HasColumnType("jsonb");
-            e.Property(p => p.ClientIp).HasColumnName("client_ip");
             e.Property(p => p.RequestCount).HasColumnName("request_count").HasDefaultValue(1);
             e.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
             e.Property(p => p.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("now()");
